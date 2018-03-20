@@ -5,7 +5,7 @@
 
 ## `Activity`生命周期
 我们先来看看生命周期的图<br/>
-![Android_lifecycle](src/activity_lifecycle.png)
+![Android_lifecycle](src\activity_lifecycle.png)
 
 * `onCreate()`:表示Activity正在被创建，一般在这个方法里面我们会进行一些初始化操作
 * `onReStart()`:表示Activity正在重启，一般为当前Activity从不可见重新变成可见，当用户切回桌面，Activity的onPasue()和onStop()就会被执行，再回到页面时就会执行onReStart()的内容
@@ -42,7 +42,7 @@ Activity的优先级：
 Activity的启动模式有四种：standard(标准模式)、singleTop(栈顶复用模式)、singleTask(栈内复用模式)、singleInstance(单例模式)
 ### standard(标准模式)
 标准模式即Activity的默认启动模式，特点为**无论当前需要启动的Activity是否已经有实例存在于任务栈中，系统都创建一个新的Activity实例压进任务栈中**
-![标准模式图示](src/diagram_backstack.png)
+![标准模式图示](src\diagram_backstack.png)
 
 ### singleTop(栈顶复用模式)
 栈顶复用模式即**当要新建的Activity已经处于栈顶的时候即重用这个栈顶的Activity**，即Activity将不需要调用onCreate()和onStart()等方法（因为实例已经存在，不需重建）。其他非栈顶Activity依旧需要新建。
