@@ -1,7 +1,7 @@
 # MyNote
 * Author：CrazyWah
 * Date：2018-03-19
-* Resume:[Android开发工程师-华南理工大学广州学院-区枫华](tree/master/Android开发工程师_华南理工大学广州学院_13570371569.pdf)
+* Resume:[Android开发工程师-华南理工大学广州学院-区枫华](blob/master/Android开发工程师_华南理工大学广州学院_13570371569.pdf)
 
 **该项目中的所包含的笔记主要包括：**
 
@@ -14,7 +14,7 @@
 ## 目录
 ### 1. [Android 部分笔记]()
 #### 1.1 [Android Context 上下文资源笔记]()
-* [Android Context.md](Android\Context\MD\Android Context.md)
+* [Android Context.md](..\..\tree\master\Android\Context\MD\Android Context.md)
 * [Android Activity总结.md](Android\Context\MD\Android Activity总结.md)
 * [Android Activity显式调用与隐式调用](Android\Context\MD\Android Activity显式调用与隐式调用.md)
 
