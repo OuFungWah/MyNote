@@ -1,7 +1,7 @@
 # MyNote
 * Author：CrazyWah
 * Date：2018-03-19
-* Resume:[Android开发工程师-华南理工大学广州学院-区枫华](/Android开发工程师_华南理工大学广州学院_13570371569.pdf)
+* Resume:[Android开发工程师-华南理工大学广州学院-区枫华](tree/master/Android开发工程师_华南理工大学广州学院_13570371569.pdf)
 
 **该项目中的所包含的笔记主要包括：**
 
