@@ -762,3 +762,7 @@ boolean enqueueMessage(Message msg, long when) {
 ```
 
 ## 3、总结
+经过几天的源码阅读，我大致地摸清楚了Android的Handller+Looper+MessageQueue合作的消息机制，可总结为以下这幅流程图
+![Android消息机制流程图](Picture/Android 消息机制图解.png)
+
+如果以上总结有任何错漏之处非常欢迎各位在issue处提出错误处
