@@ -13,36 +13,36 @@ Android的消息机制主要由Handler、Looper和MessageQueue相互协助。
 ## 目录：
 1. 机制简述
 	1. Handler（处理器）：开发时最常接触到的上层控件
-	* Looper（循环器）
-	* Message（消息）
-	* MessageQueue（消息队列）
-* 源码分析
+	2. Looper（循环器）
+	3. Message（消息）
+	4. MessageQueue（消息队列）
+2. 源码分析
 	1. Looper 源码分析
 		1. Looper的惯常用法
-		* Looper的prepare()源码
-		* Looper的loop()源码
-	* Handler 源码分析
+		2. Looper的prepare()源码
+		3. Looper的loop()源码
+	2. Handler 源码分析
 		1. Handler的惯常用法
-		* Handler构造函数源码
-		* Handler的事件分发
-		* Handler的各种send方法
+		2. Handler构造函数源码
+		3. Handler的事件分发
+		4. Handler的各种send方法
 			1. sendEmptyMessage(int what)
-			* sendEmptyMessageDelayed(int what, long delayMillis)
-			* sendMessageDelayed(Message msg, long delayMillis)
-			* sendMessageAtTime(Message msg, long uptimeMillis)
-			* enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis)
-		* Handler的各种Post方法
+			2. sendEmptyMessageDelayed(int what, long delayMillis)
+			3. sendMessageDelayed(Message msg, long delayMillis)
+			4. sendMessageAtTime(Message msg, long uptimeMillis)
+			5. enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis)
+		5. Handler的各种Post方法
 			1. post(Runnable r)
-			* postAtTime(Runnable r, long uptimeMillis)
-			* postDelayed(Runnable r, long delayMillis)
-			* getPostMessage(Runnable r)
-	* Message 源码分析
+			2. postAtTime(Runnable r, long uptimeMillis)
+			3. postDelayed(Runnable r, long delayMillis)
+			4. getPostMessage(Runnable r)
+	3. Message 源码分析
 		1. Message的结构
-		* Message的对象获取
-	* MessageQueue 源码分析
+		2. Message的对象获取
+	4. MessageQueue 源码分析
 		1. next()
-		* enqueueMessage(Message msg, long when)
-* 总结
+		2. enqueueMessage(Message msg, long when)
+3. 总结
 
 ## 1、机制简述
 以下控件全部都是在android.os包之下的
@@ -763,6 +763,7 @@ boolean enqueueMessage(Message msg, long when) {
 
 ## 3、总结
 经过几天的源码阅读，我大致地摸清楚了Android的Handller+Looper+MessageQueue合作的消息机制，可总结为以下这幅流程图
+
 ![Android消息机制流程图](Picture/Android 消息机制图解.png)
 
 如果以上总结有任何错漏之处非常欢迎各位在issue处提出错误处
