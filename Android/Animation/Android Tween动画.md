@@ -1,4 +1,8 @@
 # Android Tween动画
+* Author:CrazyWah
+* Date:2017.10.10
+* CopyRight:crazywah.com
+
 可以为一个视图创建一系列的动画
 
 ## 一、基本用法：

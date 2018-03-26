@@ -1,4 +1,8 @@
 # Android IntentFilter意图过滤器
+* Author:CrazyWah
+* Date:2018.03.01
+* CopyRight:crazywah.com
+
 我们都知道Android的Activity（或service）调用分为显式调用和隐式调用。
 * 显式调用即在转跳意图中指明目标Activity的名字（甚至详细至报名，看调用方式）；
 * 隐式调用即只需要指明需要的action（动作），data（数据），category（类别） 然后让系统筛选出对应的Activity来匹配，如果有多个Activity匹配则由用户选择由何Activity来响应。

@@ -1,6 +1,7 @@
 # Java 修饰词 Modifier
-* Author：CrazyWah
-* Date：2018.03.17 SAT
+* Author:CrazyWah
+* Date:2018.03.17
+* CopyRight:crazywah.com
 
 写这篇总结有两个原因：
 1. 今天去笔试了，发现自己的Java基础有一些细节忘掉了，所以决定同时`Android`、`Java`双开（希望肝不会爆。。。）

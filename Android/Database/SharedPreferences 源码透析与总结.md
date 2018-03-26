@@ -1,6 +1,8 @@
 # `SharedPreferences` 源码透析与总结
 * Author：CrazyWah
 * Date：2018.03.14
+* CopyRight:crazywah.com
+
 ## 一、`SharedPreferences`的简介
 `SharedPreferences`字面意思就是`共享偏好设置`，多用于存储一些开关或者是应用的某些设置信息。是Android官方提供的数据持久化方案中的一种，是一种非常轻量级的存储方案。
 `SharedPreferences`有以下特点：

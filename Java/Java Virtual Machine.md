@@ -1,4 +1,8 @@
 # Java 虚拟机 JVM(Java Virtual Machine)
+* Author:CrazyWah
+* Date:2018.03.20
+* CopyRight:crazywah.com
+
 ## The Java Virtual Machine
 The Java Virtual Machine is the cornerstone(基石) of the Java platform. It is the component(构件) of the technology responsible(责任、主管) for its hardware- and operating system-independence(硬件平台无关性), the small size of its compiled code, and its ability to protect users from malicious(怀有恶意的) programs.
 

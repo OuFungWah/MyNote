@@ -1,4 +1,8 @@
 # Android过场动画（一）
+* Author:CrazyWah
+* Date:2017.10.10
+* CopyRight:crazywah.com
+
 未经修改的app，`Android`自己有默认的过场动画。但是有时候开发者遇到的开发需求没有这么的简单，需要改变一些入场和出场的动画，这时候就需要我们通过代码来实现了。
 ## Tween动画
 使用Tween动画定义过场动画

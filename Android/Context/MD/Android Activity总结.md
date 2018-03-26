@@ -1,4 +1,8 @@
 # `Activity`
+* Author:CrazyWah
+* Date:2018.01.24
+* CopyRight:crazywah.com
+
 ## `Activity` 介绍
 `Activity`作为Android的四大组件之一，其重要性已经不需要强调了，是使用最频繁的组件之一。<br/>
 `Activity`说白了就是用户能看见的界面

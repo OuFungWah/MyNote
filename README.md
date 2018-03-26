@@ -26,9 +26,12 @@
 * [Android过场动画（一）.md](https://github.com/OuFungWah/MyNote/blob/master/Android/Animation/Android%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%88%E4%B8%80%EF%BC%89.md)
 * [Android过场动画（二）.md](https://github.com/OuFungWah/MyNote/blob/master/Android/Animation/Android%E8%BF%87%E5%9C%BA%E5%8A%A8%E7%94%BB%EF%BC%88%E4%BA%8C%EF%BC%89.md)
 
-#### 1.3 [Android数据持久化笔记](https://github.com/OuFungWah/MyNote/tree/master/Android/Database)  
+#### 1.3 [Android 数据持久化笔记](https://github.com/OuFungWah/MyNote/tree/master/Android/Database)  
 * [Android SQLite数据库](https://github.com/OuFungWah/MyNote/blob/master/Android/Database/Android%20SQLite%E6%95%B0%E6%8D%AE%E5%BA%93.md)
 * [Android SharedPreferences源码透析与总结](https://github.com/OuFungWah/MyNote/blob/master/Android/Database/SharedPreferences%20%E6%BA%90%E7%A0%81%E9%80%8F%E6%9E%90%E4%B8%8E%E6%80%BB%E7%BB%93.md)
+
+#### 1.4 [Android 消息运行机制笔记]()
+* [Android Handler+Looper+MessageQueue]()
 
 #### 其他笔记
 * [上传自己的依赖库到Jcenter（从0开始，简单版）](https://github.com/OuFungWah/MyNote/blob/master/Android/Jcenter/%E4%B8%8A%E4%BC%A0%E8%87%AA%E5%B7%B1%E7%9A%84%E4%BE%9D%E8%B5%96%E5%BA%93.md)

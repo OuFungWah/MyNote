@@ -1,4 +1,8 @@
 # Android 属性动画 ValueAnimator
+* Author:CrazyWah
+* Date:2017.10.10
+* CopyRight:crazywah.com
+
 Android 的属性动画就和它的名字一样，通过辅助类演算数值的变化
 ## ValueAnimator
 ### 一、ValueAnimator Java代码基础使用

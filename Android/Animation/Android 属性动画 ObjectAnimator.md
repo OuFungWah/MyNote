@@ -1,4 +1,8 @@
 # Android 属性动画 ObjectAnimator
+* Author:CrazyWah
+* Date:2017.10.10
+* CopyRight:crazywah.com
+
 `ObjectAnimator`其实是Google对`ValueAnimator`的一个封装类，它的底层还是用`ValueAnimator`实现的
 ## 一、`ObjectAnimator` 的Java基础使用
 ### 1）初始化设置需要`ObjectAnimator`演算的对象`view`

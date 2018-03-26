@@ -1,6 +1,7 @@
 # Android Context
 * Author：CrazyWah
 * Date：2018.03.15
+* CopyRight:crazywah.com
 
 ## 一、什么是Context
 相信有做过`Android`应用开发的各位对`Context`这个类型应该是不陌生的，因为到处都有它的身影。如：

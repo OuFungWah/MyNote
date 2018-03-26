@@ -1,4 +1,8 @@
 # Android Activity 显式调用与隐式调用
+* Author:CrazyWah
+* Date:2018.01.24
+* CopyRight:crazywah.com
+
 Android的Activity调用方式分为两种：显示和隐式
 ## 显式调用
 显式调用即在Intent中加入明确跳转意图的Component（构件）
