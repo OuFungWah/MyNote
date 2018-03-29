@@ -12,6 +12,24 @@
 ## 1、ListView简介
 ListView---是一个纵向可滑动的视图集合，在该集合中，View都是被紧凑地，一个接一个地安排在里面。
 
+A list view is an adapter view that does not know the details, such as type and contents, of the views it contains. Instead list view requests views on demand from a ListAdapter as needed, such as to display new views as the user scrolls up or down.
+
+In order to display items in the list, call setAdapter(ListAdapter) to associate an adapter with the list. For a simple example, see the discussion of filling an adapter view with text in the Layouts guide.
+
+To display a more custom view for each item in your dataset, implement a ListAdapter. For example, extend BaseAdapter and create and configure the view for each data item in getView(...):
+
+ListView attempts to reuse view objects in order to improve performance and avoid a lag in response to user scrolls. To take advantage of this feature, check if the convertView provided to getView(...) is null before creating or inflating a new view object. See Making ListView Scrolling Smooth for more ways to ensure a smooth user experience.
+
+For a more complete example of creating a custom adapter, see the Custom Choice List sample app.
+
+To specify an action when a user clicks or taps on a single list item, see Handling click events.
+
+To learn how to populate a list view with a CursorAdapter, see the discussion of filling an adapter view with text in the Layouts guide. See Using a Loader to learn how to avoid blocking the main thread when using a cursor.
+
+Note, many examples use ListActivity or ListFragment to display a list view. Instead, favor the more flexible approach when writing your own app: use a more generic Activity subclass or Fragment subclass and add a list view to the layout or view hierarchy directly. This approach gives you more direct control of the list view and adapter.
+
+Summary
+
 ListView适用的场景非常的多：通讯录、消息列表、
 
 （更新、更流畅而且性能更佳的视图集合控件可以看 [RecyclerView]() ）
@@ -262,6 +280,9 @@ public class ListViewSampleAdpter extends BaseAdapter {
 
 ```
 
+## 源码部分需要其他的一些基础，暂时搁置
+
+<!-- 
 ## 3、ListView源码分析.
 ### 3.1、ListView的构造函数：
 在ListView的构造函数中主要是获取布局文件中的参数和初始化ListView的Header和Footer
@@ -343,5 +364,70 @@ public class ListViewSampleAdpter extends BaseAdapter {
         a.recycle();
     }
 ```
+### 3.2、ListView的FixedViewInfo
 
-## 4、总结
+```java
+	/**
+     * A class that represents a fixed view in a list, for example a header at the top
+     * or a footer at the bottom.
+     */
+	public class FixedViewInfo {
+        /** The view to add to the list */
+        public View view;
+        /** The data backing the view. This is returned from {@link ListAdapter#getItem(int)}. */
+        public Object data;
+        /** <code>true</code> if the fixed view should be selectable in the list */
+        public boolean isSelectable;
+    }
+```
+
+### 3.3、ListView的findViewTraversal方法
+遍历ListView中的，找出对应id的View
+
+```java
+	/**
+     * @see android.view.View#findViewById(int)
+     * @removed For internal use only. This should have been hidden.
+     */
+    @Override
+    protected <T extends View> T findViewTraversal(@IdRes int id) {
+        // First look in our children, then in any header and footer views that
+        // may be scrolled off.
+        View v = super.findViewTraversal(id);
+        if (v == null) {
+            v = findViewInHeadersOrFooters(mHeaderViewInfos, id);
+            if (v != null) {
+                return (T) v;
+            }
+            v = findViewInHeadersOrFooters(mFooterViewInfos, id);
+            if (v != null) {
+                return (T) v;
+            }
+        }
+        return (T) v;
+    }
+
+	View findViewInHeadersOrFooters(ArrayList<FixedViewInfo> where, int id) {
+        // Look in the passed in list of headers or footers for the view.
+        if (where != null) {
+            int len = where.size();
+            View v;
+
+            for (int i = 0; i < len; i++) {
+                v = where.get(i).view;
+
+                if (!v.isRootNamespace()) {
+                    v = v.findViewById(id);
+
+                    if (v != null) {
+                        return v;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+``` -->
+
+## 3、总结
