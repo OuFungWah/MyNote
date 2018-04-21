@@ -1,7 +1,8 @@
 # Java 修饰词 Modifier
-* Author:CrazyWah
-* Date:2018.03.17
-* CopyRight:crazywah.com
+|Author|CrazyWah|
+|---|---|
+|Date|2018.03.17|
+|CopyRight|crazywah.com|
 
 写这篇总结有两个原因：
 
