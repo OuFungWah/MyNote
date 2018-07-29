@@ -2,7 +2,7 @@
 <html>
   <title>Uri test</title>
   <body>
-    <a herf="oufenghua://www.crazywah.com">Click here to go to the test app</a>
+    <a href="oufenghua://www.crazywah.com">Click here to go to the test app</a>
   </body>
 </html>
 
