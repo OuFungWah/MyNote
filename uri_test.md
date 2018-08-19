@@ -8,12 +8,12 @@
 
 [Click here to go to the test app](http://m.test.uri)
 
-[Click here to launch Module A](http://open.module.a)
+[Click here to launch Module A](oufenghua://open.module.a?id=0)
 
-[Click here to launch Module B](http://open.module.b)
+[Click here to launch Module B](oufenghua://open.module.b?id=0)
 
-[Click here to launch Module C](http://open.module.c)
+[Click here to launch Module C](oufenghua://open.module.c?id=0)
 
-[Click here to launch Module D](http://open.module.d)
+[Click here to launch Module D](oufenghua://open.module.d?id=0)
 
 [Click here to launch baidu](http://www.baidu.com)
