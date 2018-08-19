@@ -15,3 +15,5 @@
 [Click here to launch Module C](http://open.module.c)
 
 [Click here to launch Module D](http://open.module.d)
+
+[Click here to launch baidu](http://www.baidu.com)
