@@ -1,4 +1,4 @@
-# Android Dialog （二）自定义
+# Android Dialog 运行机理分析&自定义
 * Author:CrazyWah
 * Date:2018.07.28
 * CopyRight:crazywah.com

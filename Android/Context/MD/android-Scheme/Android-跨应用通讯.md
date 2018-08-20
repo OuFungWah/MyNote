@@ -1,5 +1,5 @@
 # Android-允许其他应用唤起 App
-* Author:CrazyWah
+* Author:OuFungWah
 * Date:2018.08.19
 * CopyRight:crazywah.com
 
@@ -31,7 +31,6 @@ public class MainActivity extend Activity{
 ### 1.2、在 manifest.xml 注册该 Activity 并声明 intent-filter
 
 ```xml
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

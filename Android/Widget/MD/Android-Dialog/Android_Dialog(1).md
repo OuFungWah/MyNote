@@ -1,4 +1,4 @@
-# Dialog（对话框）
+# Dialog 对话框
 * Author:CrazyWah
 * Date:2018.07.22
 * CopyRight:crazywah.com
