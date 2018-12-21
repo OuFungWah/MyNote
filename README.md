@@ -47,3 +47,7 @@
 * [引用和指针.md](https://github.com/OuFungWah/MyNote/blob/master/Java/%E5%BC%95%E7%94%A8%E5%92%8C%E6%8C%87%E9%92%88.md)
 
 ### 3. [算法 部分笔记]()
+
+### 4. [Git 学习笔记](https://github.com/OuFungWah/MyNote/tree/master/Git/md)
+
+#### 4.1 [Git 入门](https://github.com/OuFungWah/MyNote/blob/master/Git/md/InitGitProject.md)
