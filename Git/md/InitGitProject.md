@@ -87,7 +87,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 ```git add *.c```
 
-4. 修改已跟踪的文件也需要调用 add 命令将文件暂存，暂存以后的文件才能被提交
+4. 修改已跟踪的文件也需要调用 add 命令将文件暂存，暂存以后的文件才能被提交
 
 ## 四、提交更新
 
@@ -97,7 +97,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 此时会调起 shell 环境默认的编辑器（一般为 vim 或 emacs），或者是你在 Git 全局变量 config 中设置好的编辑器。
 
-或者我们可以在提交命令后面添加 -m 指令直接添加提交信息。
+或者我们可以在提交命令后面添加 -m 指令直接添加提交信息。
 
 ```git commit -m '本次提交文件改变的说明'```
 
@@ -115,10 +115,10 @@ https协议：```https://github.com/Username/XXXproject.git```
 
 或：
 
-ssh协议：
+ssh协议：
 ```git@github.com:Username/XXXproject.git```
 
-***这个两个协议的地址在 Github 或 GitLab 的网站中都有提供；其中若要使用 ssh 协议必须配置 ssh 公钥***
+***这个两个协议的地址在 Github 或 GitLab 的网站中都有提供；其中若要使用 ssh 协议必须配置 ssh 公钥***
 
 ## 六、为工程添加 GitLab 或 GitHub 的远端关联
 
@@ -126,15 +126,15 @@ https协议：```https://github.com/Username/XXXproject.git```
 
 先给远端链接一个代号，方便使用
 
-使用 `git remote add [代号] 链接地址` 来给远端的链接一个代号名称，
+使用 `git remote add [代号] 链接地址` 来给远端的链接一个代号名称，
 
 通常：
 
 ```git remote add origin git@github.com:Username/XXXproject.git```
 
-其中 origin 可以替换成你喜欢的单词，但是常规上都命名为 origin。
+其中 origin 可以替换成你喜欢的单词，但是常规上都命名为 origin。
 
-## 七、推送本地提交至远端
+## 七、推送本地提交至远端
 
 将本地的分支推送并关联到远端我们使用 `git push -u [远端代号|远端链接] 分支名 `
 
