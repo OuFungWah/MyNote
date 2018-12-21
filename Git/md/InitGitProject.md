@@ -53,7 +53,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 2. 修改：
 
-```git config [--system|--global] core.editor [vim|nano|emacs|编辑器名称]```
+```git config [--system|--global] core.editor [vim|nano|emacs|编辑器名称]```
 
 ***查看所有配置：**
 
@@ -101,7 +101,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 ```git commit -m '本次提交文件改变的说明'```
 
-在 -m 指令前面添加 -a 即可绕过 add  命令执行
+在 -m 指令前面添加 -a 即可绕过 add  命令执行
 
 ```git commit -a -m '本次提交文件改变的说明'```
 
@@ -109,7 +109,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 ## 五、在 Git 仓库中建立项目
 
-在 Github （或其他服务器上的 Gitlab ）上创建好项目，创建好项目以后复制项目地址：
+在 Github （或其他服务器上的 Gitlab）上创建好项目，创建好项目以后复制项目地址：
 
 https协议：```https://github.com/Username/XXXproject.git```
 
@@ -122,7 +122,7 @@ ssh协议：
 
 ## 六、为工程添加 GitLab 或 GitHub 的远端关联
 
-进行到当前这一步时，本地的 Git 和 远端的仓库都算是建立完成了，我们需要做的就是将两者关联起来。
+进行到当前这一步时，本地的 Git 和 远端的仓库都算是建立完成了，我们需要做的就是将两者关联起来。
 
 先给远端链接一个代号，方便使用
 
