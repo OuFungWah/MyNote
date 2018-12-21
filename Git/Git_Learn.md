@@ -1,1 +1,0 @@
-git clone [url]    ---下载项目
