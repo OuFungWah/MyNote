@@ -1,7 +1,7 @@
 # MyNote
 * Author：CrazyWah
 * Date：2018-03-19
-* Resume:[区枫华的简历](https://github.com/OuFungWah/MyNote/blob/master/Android%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88_%E5%8D%8E%E5%8D%97%E7%90%86%E5%B7%A5%E5%A4%A7%E5%AD%A6%E5%B9%BF%E5%B7%9E%E5%AD%A6%E9%99%A2_13570371569.pdf) 
+* Resume:[区枫华的简历](https://github.com/OuFungWah/MyNote/blob/master/%E7%AE%80%E5%8E%86%E4%B8%AD%E6%96%87.pdf) 
 [ (Engilsh Version)](https://github.com/OuFungWah/MyNote/blob/master/Resume_EN_ver.pdf)
 
 **该项目中的所包含的笔记主要包括：**
