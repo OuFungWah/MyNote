@@ -1,4 +1,4 @@
-# Git 入门 -- 上传项目至 Git 仓库
+# Git 总结 -- 创建并上传项目至 Git 仓库
 
 |author|Crazywah|
 |-----|-------|
@@ -6,12 +6,14 @@
 
 前提：
 * 有 Git 环境
-* 对命令行有一定了解
 * 有Shell命令行终端
+* 对命令行有一定了解
 
 ## 一、配置 Git 的通用设置
 
 Git 的配置都存放在 config 文件中，一共有三个级别的 config：系统级、用户级、仓库级。
+
+作用范围越小的优先级越高，即当系统级的config中用户名为A，用户级的config中用户名为B，则提交中的用户名会使用B。
 
 1. **系统级**：即使用当前安装了 Git 的系统上所有用户的 Git 配置。
     * 对应信息存放在 `/etc/gitconfig` 文件中
@@ -115,8 +117,7 @@ https协议：```https://github.com/Username/XXXproject.git```
 
 或：
 
-ssh协议：
-```git@github.com:Username/XXXproject.git```
+ssh协议：```git@github.com:Username/XXXproject.git```
 
 ***这个两个协议的地址在 Github 或 GitLab 的网站中都有提供；其中若要使用 ssh 协议必须配置 ssh 公钥***
 

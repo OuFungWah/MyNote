@@ -146,3 +146,7 @@ public class MyAdapter extends RecyclerView.Adapter {
 ### RecyclerView
 ### Adapter
 ### LayoutManager
+
+### 解决 ScrollView 中嵌套 RecyclerView 显示不全问题
+
+不使用 ScrollView 转使用 NestedScrollView
