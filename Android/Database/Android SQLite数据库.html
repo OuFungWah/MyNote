@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Android SQLite数据库.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+	font-size: 14px;
+	padding: 0 12px;
+	line-height: 22px;
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	color: #4080D0;
+	text-decoration: none;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+h1 code,
+h2 code,
+h3 code,
+h4 code,
+h5 code,
+h6 code {
+	font-size: inherit;
+	line-height: auto;
+}
+
+a:hover {
+	color: #4080D0;
+	text-decoration: underline;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left: 5px solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 14px;
+	line-height: 19px;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+.mac code {
+	font-size: 12px;
+	line-height: 18px;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+/** Theming */
+
+.vscode-light,
+.vscode-light pre code {
+	color: rgb(30, 30, 30);
+}
+
+.vscode-dark,
+.vscode-dark pre code {
+	color: #DDD;
+}
+
+.vscode-high-contrast,
+.vscode-high-contrast pre code {
+	color: white;
+}
+
+.vscode-light code {
+	color: #A31515;
+}
+
+.vscode-dark code {
+	color: #D7BA7D;
+}
+
+.vscode-light pre:not(.hljs),
+.vscode-light code > div {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre:not(.hljs),
+.vscode-dark code > div {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre:not(.hljs),
+.vscode-high-contrast code > div {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+.vscode-light blockquote,
+.vscode-dark blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.vscode-high-contrast blockquote {
+	background: transparent;
+	border-color: #fff;
+}
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family:  "Meiryo", "Segoe WPC", "Segoe UI", "SFUIText-Light", "HelveticaNeue-Light", sans-serif, "Droid Sans Fallback";
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+</head>
+<body>
+<h1 id="android-sqlite%E6%95%B0%E6%8D%AE%E5%BA%93">Android SQLite数据库</h1>
+<ul>
+<li>Author:CrazyWah</li>
+<li>Date:2018.03.19</li>
+<li>CopyRight:crazywah.com</li>
+</ul>
+<p>现在，不管我们做什么项目都离不开两个字——数据。
+要么上网拉数据，要么本地数据库的数据，这些数据都是做一个项目脱离不了的。
+而不管是网上的接口拉数据还是本地数据，都离不开数据库存储数据，这就是我们要学习好Android数据的原因。</p>
+<h2 id="android%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9B%B8%E5%85%B3%E7%B1%BB%EF%BC%9A">Android数据库相关类：</h2>
+<h3 id="sqliteopenhelper"><code>SQLiteOpenHelper</code></h3>
+<p><code>SQLiteOpenHelper</code>是一个负责对数据库创建、管理和版本控制的工具类。</p>
+<h3 id="sqlitedatabase"><code>SQLiteDatabase</code></h3>
+<p><code>SQLiteDataBase</code>是官方封装好的<code>SQLite</code>数据库API类</p>
+<h3 id="contentvalues"><code>ContentValues</code></h3>
+<p><code>ContentValues</code>是键值对存放容器类</p>
+<h3 id="cursorfactory"><code>CursorFactory</code></h3>
+<p><code>CursorFactory</code>是用于产生游标(Cursor)类的工厂类</p>
+<h3 id="cursor"><code>Cursor</code></h3>
+<p><code>Cursor</code>是用于遍历搜索结果的游标</p>
+<h2 id="%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8">数据库的基础使用</h2>
+<h3 id="1%E3%80%81%E7%BB%A7%E6%89%BF%E6%8A%BD%E8%B1%A1%E7%B1%BBsqlitedbopenhelper%E5%B9%B6%E9%87%8D%E5%86%99%E7%9B%B8%E5%85%B3%E6%96%B9%E6%B3%95">1、继承抽象类<code>SQLiteDbOpenHelper</code>并重写相关方法</h3>
+<p>因为<code>SQLiteDbOpenHelper</code>是一个抽象类，所以我们需要新建一个它的子类并实现它的抽象方法。<br/>
+重写两个构造函数：</p>
+<ul>
+<li>super(context, name, factory, version)：</li>
+<li>super(context, name, factory, version, errorHandler)：
+重写两个方法：</li>
+<li>onCreate() :第一次创建数据库时调用</li>
+<li>onUpgrade() :更新数据库时调用</li>
+</ul>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseDatabaseHelper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">SQLiteOpenHelper</span> </span>{
+    
+    <span class="hljs-comment">//注意SQLite的大小写</span>
+    <span class="hljs-keyword">private</span> String createUserTable = <span class="hljs-string">"CREATE TABLE User("</span> +
+                <span class="hljs-string">" num CHAR(64) PRIMARY KEY NOT NULL,"</span> +
+                <span class="hljs-string">" name CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" password CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" avatar CHAR(20),"</span> +
+                <span class="hljs-string">" sex CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" birthday CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" college CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" subject CHAR(20) NOT NULL,"</span> +
+                <span class="hljs-string">" grade INT,"</span> +
+                <span class="hljs-string">" class INT"</span> +
+                <span class="hljs-string">")"</span>;
+
+    <span class="hljs-comment">/**
+    * 构造函数
+    * <span class="hljs-doctag">@param</span> context 上下文资源
+    * <span class="hljs-doctag">@param</span> factory 游标工厂类对象，null为默认
+    * <span class="hljs-doctag">@param</span> name    数据库文件名字
+    * <span class="hljs-doctag">@param</span> version 数据库版本
+    */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BaseDatabaseHelper</span><span class="hljs-params">(Context context, String name, SQLiteDatabase.CursorFactory factory, <span class="hljs-keyword">int</span> version)</span> </span>{
+        <span class="hljs-keyword">super</span>(context, name, factory, version);
+    }
+
+    <span class="hljs-comment">/**
+    * 带错误应对器的构造函数
+    * <span class="hljs-doctag">@param</span> context        上下文资源
+    * <span class="hljs-doctag">@param</span> factory        游标工厂类对象，null为默认
+    * <span class="hljs-doctag">@param</span> name           数据库文件名字
+    * <span class="hljs-doctag">@param</span> version        数据库版本
+    * <span class="hljs-doctag">@param</span> errorHandler   
+    */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BaseDatabaseHelper</span><span class="hljs-params">(Context context, String name, SQLiteDatabase.CursorFactory factory, <span class="hljs-keyword">int</span> version, DatabaseErrorHandler errorHandler)</span> </span>{
+        <span class="hljs-keyword">super</span>(context, name, factory, version, errorHandler);
+    }
+
+    <span class="hljs-comment">//第一次创建数据库时会调用的方法</span>
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(SQLiteDatabase db)</span> </span>{
+        <span class="hljs-comment">//执行SQLite的建表语句</span>
+        db.execSQL(createUserTable);
+    }
+
+    <span class="hljs-comment">/**
+     * 更新数据库
+     *
+     * <span class="hljs-doctag">@param</span> db
+     * <span class="hljs-doctag">@param</span> oldVersion
+     * <span class="hljs-doctag">@param</span> newVersion
+     */</span>
+    <span class="hljs-meta">@Override</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onUpgrade</span><span class="hljs-params">(SQLiteDatabase db, <span class="hljs-keyword">int</span> oldVersion, <span class="hljs-keyword">int</span> newVersion)</span> </span>{
+
+    }
+}
+
+</div></code></pre>
+<p><a href="https://github.com/OuFungWah/FungWahToolsDemo/blob/master/fungwahtools/src/main/java/com/example/fungwahtools/database/helper/BaseDatabaseHelper.java">BaseDatabaseHelper.java</a></p>
+<h4 id="%E4%B8%80%E7%82%B9%E5%B0%8F%E6%80%9D%E8%80%83%EF%BC%9A">一点小思考：</h4>
+<p>我曾经一度认为<code>OpenHelper</code>的数据库创建是在创建<code>OpenHelper</code>对象的时候就创建好的，但还是有点小疑惑，于是去源码里面看了一下。。。
+<br/>这是在源码中搜索的onCreate()出现的位置,不小心我们也看到了onUpGrade()和onDowngrade()
+<br/>一言不合放源码:</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteDbOpenHelper</span></span>{
+    
+    <span class="hljs-comment">//...........前方省略</span>
+    
+    <span class="hljs-function"><span class="hljs-keyword">private</span> SQLiteDatabase <span class="hljs-title">getDatabaseLocked</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> writable)</span> </span>{
+            <span class="hljs-comment">//............前方省略</span>
+    
+                <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> version = db.getVersion();
+                <span class="hljs-keyword">if</span> (version != mNewVersion) {
+                    <span class="hljs-keyword">if</span> (db.isReadOnly()) {
+                        <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> SQLiteException(com.example.fungwahtools.com.example.fungwahtools.database +
+                                db.getVersion() + <span class="hljs-string">" to "</span> + mNewVersion + <span class="hljs-string">": "</span> + mName);
+                    }
+    
+                    db.beginTransaction();
+                    <span class="hljs-keyword">try</span> {
+                        <span class="hljs-keyword">if</span> (version == <span class="hljs-number">0</span>) {
+        <span class="hljs-comment">//----------------我们的onCreate方法出现在这里----------------</span>
+                            onCreate(db);
+                        } <span class="hljs-keyword">else</span> {
+                            <span class="hljs-keyword">if</span> (version &gt; mNewVersion) {
+        <span class="hljs-comment">//----------------我们的onDowngrade方法出现在这里----------------</span>
+                                onDowngrade(db, version, mNewVersion);
+                            } <span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">//----------------我们的onUpgrade方法出现在这里----------------</span>
+                                onUpgrade(db, version, mNewVersion);
+                            }
+                        }
+                        db.setVersion(mNewVersion);
+                        db.setTransactionSuccessful();
+                    } <span class="hljs-keyword">finally</span> {
+                        db.endTransaction();
+                    }
+                }
+    
+            <span class="hljs-comment">//后方省略.............</span>
+        }
+        
+    <span class="hljs-comment">//后方省略...........</span>
+}
+
+</div></code></pre>
+<p>？？？那么。。这个调用了我们实现好的方法的方法<code>getDataBaseLocked(boolean writable)</code>是何方神圣呢？
+<br/>
+是的，学习过数据库的应该能从这个方法的方法名中猜出来个七八十，那就是带锁访问数据库。
+因为数据库中的数据要始终保持它的一致性，所以对数据库的数据修改时需要上锁，防止两个修改操作同时进行导致数据不一致，是一个数据库的知识点。
+<br/>所以按照这个方法的功能，我们找到了调用它的方法
+<br/>上源码~~~</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">abstract</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteOpenHelper</span></span>{
+    
+    <span class="hljs-comment">//前面省略.............</span>
+    
+    <span class="hljs-comment">//获取可写数据库</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> SQLiteDatabase <span class="hljs-title">getWritableDatabase</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) {
+                <span class="hljs-keyword">return</span> getDatabaseLocked(<span class="hljs-keyword">true</span>);
+            }
+        }
+    
+    <span class="hljs-comment">//获取只读数据库</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> SQLiteDatabase <span class="hljs-title">getReadableDatabase</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) {
+                <span class="hljs-keyword">return</span> getDatabaseLocked(<span class="hljs-keyword">false</span>);
+            }
+        }
+        
+    <span class="hljs-comment">//后面省略............</span>
+}
+
+</div></code></pre>
+<p><em>通过阅读其源码发现，数据库是在调用获取数据库的方法时才进创建的</em></p>
+<h3 id="2%E3%80%81%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%95%B0%E6%8D%AE%E5%BA%93%E7%9A%84%E6%93%8D%E4%BD%9C%E7%B1%BB%EF%BC%8C%E5%AE%9A%E4%B9%89%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9A%84%E4%B8%AA%E6%80%A7%E5%8C%96%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C">2、创建一个数据库的操作类，定义你需要的个性化的数据库操作</h3>
+<p>当我们建立好<code>SQLiteDbOpenHelper</code>的子类以后，我们仅仅是定义好了数据库的获取类。
+当我们通过<code>SQLiteDbOpenHelper</code>获取到了数据库以后还需要对数据进行增、删、改、查等操作，所以我们需要另外定义一个数据库操作类
+就是常见的dao类，DAO(Data Access Object)。
+<br/>dao类中实现的增删改查方法都是使用<code>SQLiteDatabase</code>的方法进行改装的
+<br/>上代码~</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BaseDao</span> </span>{
+
+    <span class="hljs-keyword">private</span> SQLiteOpenHelper helper;
+
+    <span class="hljs-comment">//获取到数据库打开工具类</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">BaseDao</span><span class="hljs-params">(SQLiteOpenHelper helper)</span> </span>{
+        <span class="hljs-keyword">this</span>.helper = helper;
+    }
+
+    <span class="hljs-comment">/**
+     * 
+     * <span class="hljs-doctag">@param</span> table 表名
+     * <span class="hljs-doctag">@param</span> contentValues 需要被插入的一行数据的所有必须字段与字段值对
+     * <span class="hljs-doctag">@return</span> 操作是否成功
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">insert</span><span class="hljs-params">(String table, ContentValues contentValues)</span> </span>{
+        <span class="hljs-keyword">boolean</span> flag = <span class="hljs-keyword">false</span>;
+        <span class="hljs-comment">//用于存储操作结束后受影响的行数的变量，-1为无影响</span>
+        <span class="hljs-keyword">long</span> index = -<span class="hljs-number">1L</span>;
+        SQLiteDatabase database = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            database = helper.getWritableDatabase();
+            <span class="hljs-comment">//第二个参数用于把没有指定字段的数据插入到第二个参数的列中,可为null</span>
+            index = database.insert(table, <span class="hljs-keyword">null</span>, contentValues);
+            <span class="hljs-keyword">if</span> (index != -<span class="hljs-number">1</span>) {
+                flag = <span class="hljs-keyword">true</span>;
+            }
+        } <span class="hljs-keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+            flag = <span class="hljs-keyword">false</span>;
+        } <span class="hljs-keyword">finally</span> {
+            database.close();
+        }
+
+        <span class="hljs-keyword">return</span> flag;
+    }
+
+    <span class="hljs-comment">/**
+     *
+     * <span class="hljs-doctag">@param</span> table 表名
+     * <span class="hljs-doctag">@param</span> contentValues 需要被修改的字段与字段值对
+     * <span class="hljs-doctag">@param</span> where 约束字段 " name = ? "、" name = ? AND num = ? "、" name = 'Tom' " ，注意若在此参数指明了参数值请在Args参数处传null
+     * <span class="hljs-doctag">@param</span> whereArgs 约束字段对应的值
+     * <span class="hljs-doctag">@return</span> 操作是否成功
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">update</span><span class="hljs-params">(String table, ContentValues contentValues, String where, String whereArgs[])</span> </span>{
+        <span class="hljs-keyword">boolean</span> flag = <span class="hljs-keyword">false</span>;
+        <span class="hljs-comment">//用于存储操作结束后受影响的行数的变量，-1为无影响</span>
+        <span class="hljs-keyword">int</span> index = <span class="hljs-number">0</span>;
+        SQLiteDatabase database = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            database = helper.getWritableDatabase();
+            index = database.update(table, contentValues, where, whereArgs);
+            <span class="hljs-keyword">if</span> (index != -<span class="hljs-number">1</span>) {
+                flag = <span class="hljs-keyword">true</span>;
+            }
+        } <span class="hljs-keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+            flag = <span class="hljs-keyword">false</span>;
+        } <span class="hljs-keyword">finally</span> {
+            database.close();
+        }
+        <span class="hljs-keyword">return</span> flag;
+    }
+
+    <span class="hljs-comment">/**
+     * 基础的删除功能
+     * <span class="hljs-doctag">@param</span> tableName 表名
+     * <span class="hljs-doctag">@param</span> where 约束字段名 " name = ? "、" name = ? AND num = ? "、" name = 'Tom' " ，注意若在此参数指明了参数值请在Args参数处传null
+     * <span class="hljs-doctag">@param</span> whereArgs 字段对应的值 对应的值 对应多少个问号就多少个值
+     * <span class="hljs-doctag">@return</span> 操作是否成功
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">delete</span><span class="hljs-params">(String tableName, String where, String whereArgs[])</span> </span>{
+        <span class="hljs-keyword">boolean</span> flag = <span class="hljs-keyword">false</span>;
+        <span class="hljs-comment">//用于存储操作结束后受影响的行数的变量，-1为无影响</span>
+        <span class="hljs-keyword">int</span> index = -<span class="hljs-number">1</span>;
+        SQLiteDatabase database = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            database = helper.getWritableDatabase();
+            index = database.delete(tableName, where, whereArgs);
+            <span class="hljs-keyword">if</span> (index != -<span class="hljs-number">1</span>) {
+                flag = <span class="hljs-keyword">true</span>;
+            }
+        } <span class="hljs-keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+            flag = <span class="hljs-keyword">false</span>;
+        } <span class="hljs-keyword">finally</span> {
+            database.close();
+        }
+        <span class="hljs-keyword">return</span> flag;
+    }
+
+    <span class="hljs-comment">/**
+     * 搜索全表
+     *
+     * <span class="hljs-doctag">@param</span> table 表名
+     * <span class="hljs-doctag">@return</span> 返回所有符合条件的数据
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">private</span> List&lt;Map&gt; <span class="hljs-title">selectAll</span><span class="hljs-params">(String table)</span> </span>{
+        <span class="hljs-keyword">return</span> select(table, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>, <span class="hljs-keyword">null</span>);
+    }
+
+    <span class="hljs-comment">/**
+     * 基础的 Select 方法
+     *
+     * <span class="hljs-doctag">@param</span> table         表名
+     * <span class="hljs-doctag">@param</span> columns       选择要获取到的字段
+     * <span class="hljs-doctag">@param</span> selection     约束字段名 如： " name = ? "、" name = ? AND num = ? "、" name = 'Tom' "，注意若在此参数指明了参数值请在Args参数处传null
+     * <span class="hljs-doctag">@param</span> selectionArgs 对应的值 对应多少个问号就多少个值
+     * <span class="hljs-doctag">@param</span> groupBy       用于分组的字段名 " sex "
+     * <span class="hljs-doctag">@param</span> having        选择字段对应值的分组 " '男' "
+     * <span class="hljs-doctag">@param</span> orderBy       排序 " num ASC " " num DESC "
+     * <span class="hljs-doctag">@return</span> 返回所有符合条件的数据
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> List&lt;Map&gt; <span class="hljs-title">select</span><span class="hljs-params">(String table, String[] columns, String selection,
+                            String[] selectionArgs, String groupBy, String having,
+                            String orderBy)</span> </span>{
+        List&lt;Map&gt; mapList = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();
+        SQLiteDatabase database = <span class="hljs-keyword">null</span>;
+        <span class="hljs-comment">/**
+         * getType()返回的类型与对应的 int 值
+         * int FIELD_TYPE_BLOB = 4;
+         * int FIELD_TYPE_FLOAT = 2;
+         * int FIELD_TYPE_INTEGER = 1;
+         * int FIELD_TYPE_NULL = 0;
+         * int FIELD_TYPE_STRING = 3;
+         */</span>
+        Cursor cursor = <span class="hljs-keyword">null</span>;
+        <span class="hljs-keyword">try</span> {
+            database = helper.getReadableDatabase();
+            cursor = database.query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+            <span class="hljs-keyword">while</span> (cursor.moveToNext()) {
+                Map map = <span class="hljs-keyword">new</span> HashMap&lt;&gt;();
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; cursor.getColumnCount(); i++) {
+                    <span class="hljs-comment">//判断数据类型再按相应的类型进行存储</span>
+                    <span class="hljs-keyword">switch</span> (cursor.getType(i)) {
+                        <span class="hljs-keyword">case</span> <span class="hljs-number">0</span>:
+                            map.put(cursor.getColumnName(i), <span class="hljs-keyword">null</span>);
+                            <span class="hljs-keyword">break</span>;
+                        <span class="hljs-keyword">case</span> <span class="hljs-number">1</span>:
+                            map.put(cursor.getColumnName(i), cursor.getInt(i));
+                            <span class="hljs-keyword">break</span>;
+                        <span class="hljs-keyword">case</span> <span class="hljs-number">2</span>:
+                            map.put(cursor.getColumnName(i), cursor.getFloat(i));
+                            <span class="hljs-keyword">break</span>;
+                        <span class="hljs-keyword">case</span> <span class="hljs-number">3</span>:
+                            map.put(cursor.getColumnName(i), cursor.getString(i));
+                            <span class="hljs-keyword">break</span>;
+                        <span class="hljs-keyword">case</span> <span class="hljs-number">4</span>:
+                            map.put(cursor.getColumnName(i), cursor.getBlob(i));
+                            <span class="hljs-keyword">break</span>;
+                    }
+                }
+                mapList.add(map);
+            }
+        } <span class="hljs-keyword">catch</span> (Exception e) {
+            e.printStackTrace();
+        } <span class="hljs-keyword">finally</span> {
+            database.close();
+        }
+        <span class="hljs-keyword">return</span> mapList;
+    }
+
+}
+
+</div></code></pre>
+<h4 id="sqlitedatabase-%E7%9A%84%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8%E7%A0%94%E7%A9%B6">SQLiteDatabase 的方法使用研究</h4>
+<p>为了更好地理解<code>SQLiteDatabase</code>中各方法的使用和参数的注入，所以只好再次搬出英文的源码来看看了</p>
+<h5 id="%E6%8F%92%E5%85%A5%E6%96%B9%E6%B3%95insertstring-table-string-nullcolumnhack-contentvalues-values">插入方法<code>insert(String table, String nullColumnHack, ContentValues values)</code></h5>
+<p>我们先来定位到插入方法所在的位置：</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteDatabase</span></span>{
+    
+    <span class="hljs-comment">//前面省略..............</span>
+    
+        <span class="hljs-comment">/**
+         * Convenience method for inserting a row into the database.
+         *
+         * <span class="hljs-doctag">@param</span> table the table to insert the row into
+         * <span class="hljs-doctag">@param</span> nullColumnHack optional; may be &lt;code&gt;null&lt;/code&gt;.
+         *            SQL doesn't allow inserting a completely empty row without
+         *            naming at least one column name.  If your provided &lt;code&gt;values&lt;/code&gt; is
+         *            empty, no column names are known and an empty row can't be inserted.
+         *            If not set to null, the &lt;code&gt;nullColumnHack&lt;/code&gt; parameter
+         *            provides the name of nullable column name to explicitly insert a NULL into
+         *            in the case where your &lt;code&gt;values&lt;/code&gt; is empty.
+         * <span class="hljs-doctag">@param</span> values this map contains the initial column values for the
+         *            row. The keys should be the column names and the values the
+         *            column values
+         * <span class="hljs-doctag">@return</span> the row ID of the newly inserted row, or -1 if an error occurred
+         */</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">long</span> <span class="hljs-title">insert</span><span class="hljs-params">(String table, String nullColumnHack, ContentValues values)</span> </span>{
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">return</span> insertWithOnConflict(table, nullColumnHack, values, CONFLICT_NONE);
+            } <span class="hljs-keyword">catch</span> (SQLException e) {
+                Log.e(TAG, <span class="hljs-string">"Error inserting "</span> + values, e);
+                <span class="hljs-keyword">return</span> -<span class="hljs-number">1</span>;
+            }
+        }
+        
+    <span class="hljs-comment">//后面省略..............        </span>
+    
+}
+
+</div></code></pre>
+<p>从源码的注释中我们了解到：</p>
+<ul>
+<li>table:需要进行插入操作的表</li>
+<li>nullColumnHack:字段为空值的字段名（可为空）。由于数据库不允许插入一个字段什么数据都没有，所以如果有字段在ContentValues对象中没有对应值的，那需要在这个参数中声明。</li>
+<li>values:需要插入的字段键值对</li>
+<li>return:返回受该方法影响的数据的行数</li>
+</ul>
+<h5 id="%E4%BF%AE%E6%94%B9%E6%96%B9%E6%B3%95-updatestring-table-contentvalues-values-string-whereclause-string-whereargs">修改方法 <code>update(String table, ContentValues values, String whereClause, String[] whereArgs)</code></h5>
+<p>我们又来定位方法的位置啦啦啦啦~~~~~</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteDatabase</span></span>{
+    
+    <span class="hljs-comment">//前面省略..............</span>
+    
+        <span class="hljs-comment">/**
+         * Convenience method for updating rows in the database.
+         *
+         * <span class="hljs-doctag">@param</span> table the table to update in
+         * <span class="hljs-doctag">@param</span> values a map from column names to new column values. null is a
+         *            valid value that will be translated to NULL.
+         * <span class="hljs-doctag">@param</span> whereClause the optional WHERE clause to apply when updating.
+         *            Passing null will update all rows.
+         * <span class="hljs-doctag">@param</span> whereArgs You may include ?s in the where clause, which
+         *            will be replaced by the values from whereArgs. The values
+         *            will be bound as Strings.
+         * <span class="hljs-doctag">@return</span> the number of rows affected
+         */</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">update</span><span class="hljs-params">(String table, ContentValues values, String whereClause, String[] whereArgs)</span> </span>{
+            <span class="hljs-keyword">return</span> updateWithOnConflict(table, values, whereClause, whereArgs, CONFLICT_NONE);
+        }
+        
+    <span class="hljs-comment">//后面省略..............        </span>
+    
+}
+
+</div></code></pre>
+<p>从源码的注释中我们了解到：</p>
+<ul>
+<li>table:需要修改操作的表名</li>
+<li>values:需要被修改的字段键值对</li>
+<li>whereClause:约束条件字段，为空值null时即修改所有行的对应字段</li>
+<li>whereArgs:约束字段值</li>
+<li>return:返回受该方法影响的数据的行数</li>
+</ul>
+<h5 id="%E5%88%A0%E9%99%A4%E6%96%B9%E6%B3%95deletestring-table-string-whereclause-string-whereargs">删除方法<code>delete(String table, String whereClause, String[] whereArgs)</code></h5>
+<p>我们又来定位方法的位置啦啦啦啦~~~~~</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteDatabase</span></span>{
+    
+    <span class="hljs-comment">//前面省略..............</span>
+    
+    <span class="hljs-comment">/**
+     * Convenience method for deleting rows in the database.
+     *
+     * <span class="hljs-doctag">@param</span> table the table to delete from
+     * <span class="hljs-doctag">@param</span> whereClause the optional WHERE clause to apply when deleting.
+     *            Passing null will delete all rows.
+     * <span class="hljs-doctag">@param</span> whereArgs You may include ?s in the where clause, which
+     *            will be replaced by the values from whereArgs. The values
+     *            will be bound as Strings.
+     * <span class="hljs-doctag">@return</span> the number of rows affected if a whereClause is passed in, 0
+     *         otherwise. To remove all rows and get a count pass "1" as the
+     *         whereClause.
+     */</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">delete</span><span class="hljs-params">(String table, String whereClause, String[] whereArgs)</span> </span>{
+        acquireReference();
+        <span class="hljs-keyword">try</span> {
+            SQLiteStatement statement =  <span class="hljs-keyword">new</span> SQLiteStatement(<span class="hljs-keyword">this</span>, <span class="hljs-string">"DELETE FROM "</span> + table +
+                    (!TextUtils.isEmpty(whereClause) ? <span class="hljs-string">" WHERE "</span> + whereClause : <span class="hljs-string">""</span>), whereArgs);
+            <span class="hljs-keyword">try</span> {
+                <span class="hljs-keyword">return</span> statement.executeUpdateDelete();
+            } <span class="hljs-keyword">finally</span> {
+                statement.close();
+            }
+        } <span class="hljs-keyword">finally</span> {
+            releaseReference();
+        }
+    }
+        
+    <span class="hljs-comment">//后面省略..............        </span>
+    
+}
+
+</div></code></pre>
+<p>从源码的注释中我们了解到：</p>
+<ul>
+<li>table:需要删除操作的表名</li>
+<li>whereClause:约束条件字段，为空值null时即删除所有行</li>
+<li>whereArgs:约束字段值</li>
+<li>return:返回受该方法影响的数据的行数</li>
+</ul>
+<h5 id="%E6%90%9C%E7%B4%A2%E6%96%B9%E6%B3%95queryboolean-distinct-string-table-string-columnsstring-selection-string-selectionargs-string-groupbystring-having-string-orderby-string-limit">搜索方法<code>query(boolean distinct, String table, String[] columns,String selection, String[] selectionArgs, String groupBy,String having, String orderBy, String limit)</code></h5>
+<p>搜索方法在这里就有一点点特殊，不是SQL中的select关键字作为方法名了，这个要注意一下。
+<br/>查询方法和其他几个的数据库操作不一样，查询方法由于时需要返回的是数据，而数据类型还不是一定的，所以源码中定义了一个开放性的返回对象叫做游标Cursor。
+游标的使用方法比较灵活，可以自由地去获取、操作查询得到的各种数据。
+<br/>来又又又又又看源码吧~</p>
+<pre class="hljs"><code><div>
+<span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">SQLiteDatabase</span></span>{
+    
+    <span class="hljs-comment">//前面省略..............</span>
+    
+    <span class="hljs-comment">/**
+         * Query the given URL, returning a {<span class="hljs-doctag">@link</span> Cursor} over the result set.
+         *
+         * <span class="hljs-doctag">@param</span> distinct true if you want each row to be unique, false otherwise.
+         * <span class="hljs-doctag">@param</span> table The table name to compile the query against.
+         * <span class="hljs-doctag">@param</span> columns A list of which columns to return. Passing null will
+         *            return all columns, which is discouraged to prevent reading
+         *            data from storage that isn't going to be used.
+         * <span class="hljs-doctag">@param</span> selection A filter declaring which rows to return, formatted as an
+         *            SQL WHERE clause (excluding the WHERE itself). Passing null
+         *            will return all rows for the given table.
+         * <span class="hljs-doctag">@param</span> selectionArgs You may include ?s in selection, which will be
+         *         replaced by the values from selectionArgs, in order that they
+         *         appear in the selection. The values will be bound as Strings.
+         * <span class="hljs-doctag">@param</span> groupBy A filter declaring how to group rows, formatted as an SQL
+         *            GROUP BY clause (excluding the GROUP BY itself). Passing null
+         *            will cause the rows to not be grouped.
+         * <span class="hljs-doctag">@param</span> having A filter declare which row groups to include in the cursor,
+         *            if row grouping is being used, formatted as an SQL HAVING
+         *            clause (excluding the HAVING itself). Passing null will cause
+         *            all row groups to be included, and is required when row
+         *            grouping is not being used.
+         * <span class="hljs-doctag">@param</span> orderBy How to order the rows, formatted as an SQL ORDER BY clause
+         *            (excluding the ORDER BY itself). Passing null will use the
+         *            default sort order, which may be unordered.
+         * <span class="hljs-doctag">@param</span> limit Limits the number of rows returned by the query,
+         *            formatted as LIMIT clause. Passing null denotes no LIMIT clause.
+         * <span class="hljs-doctag">@return</span> A {<span class="hljs-doctag">@link</span> Cursor} object, which is positioned before the first entry. Note that
+         * {<span class="hljs-doctag">@link</span> Cursor}s are not synchronized, see the documentation for more details.
+         * <span class="hljs-doctag">@see</span> Cursor
+         */</span>
+        <span class="hljs-function"><span class="hljs-keyword">public</span> Cursor <span class="hljs-title">query</span><span class="hljs-params">(<span class="hljs-keyword">boolean</span> distinct, String table, String[] columns,
+                String selection, String[] selectionArgs, String groupBy,
+                String having, String orderBy, String limit)</span> </span>{
+            <span class="hljs-keyword">return</span> queryWithFactory(<span class="hljs-keyword">null</span>, distinct, table, columns, selection, selectionArgs,
+                    groupBy, having, orderBy, limit, <span class="hljs-keyword">null</span>);
+        }
+        
+    <span class="hljs-comment">//后面省略..............        </span>
+    
+}
+
+</div></code></pre>
+<p>从源码的注释中我们了解到：</p>
+<ul>
+<li>distinct:每行数据是否必须唯一</li>
+<li>table:需要查询操作的表名</li>
+<li>columns:希望获取到的字段</li>
+<li>selection:查询条件</li>
+<li>selectionArgs:查询条件对应值</li>
+<li>groupBy:对查询结果进行分组</li>
+<li>having:选择对应值的分组</li>
+<li>orderBy:对数据按照字段进行排序</li>
+<li>limit:对查询结果的行数限制</li>
+</ul>
+<p><em>注意：一般会使用没有distinct和limit的query方法</em></p>
+<h3 id="3%E3%80%81%E4%BD%BF%E7%94%A8%E6%88%91%E4%BB%AC%E5%89%8D%E9%9D%A2%E5%AE%9A%E4%B9%89%E5%A5%BD%E7%9A%84%E4%B8%A4%E4%B8%AA%E7%B1%BB%E6%9D%A5%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%BA%93%E6%93%8D%E4%BD%9C">3、使用我们前面定义好的两个类来实现数据库操作</h3>
+<p>首先我们需要一个helper类的对象注入到dao类对象中，用于获取SQLiteDatabase对象（当然设置dao中的helper对象的方法多种多样，这里只是其中一种）</p>
+<pre class="hljs"><code><div><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span></span>{
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(@Nullable Bundle savedInstanceState)</span> </span>{
+            <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+            setContentView(R.layout.main_activity);
+            <span class="hljs-comment">//创建OpenHelper的对象</span>
+            BaseHelper helper = <span class="hljs-keyword">new</span> BaseHelper(content,<span class="hljs-keyword">null</span>,<span class="hljs-string">"testDb"</span>,<span class="hljs-number">1</span>);
+            <span class="hljs-comment">//注入helper对象到dao中    </span>
+            BaseDao dao = <span class="hljs-keyword">new</span> BaseDao(helper);
+        }
+    
+}
+
+</div></code></pre>
+<p>获得了DAO对象以后，调用它的方法：</p>
+<h4 id="insert-%E6%8F%92%E5%85%A5%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%AD%90%EF%BC%9A">insert 插入操作例子：</h4>
+<pre class="hljs"><code><div>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span></span>{
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(@Nullable Bundle savedInstanceState)</span> </span>{
+            <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+            setContentView(R.layout.main_activity);
+            <span class="hljs-comment">//创建OpenHelper的对象</span>
+            BaseHelper helper = <span class="hljs-keyword">new</span> BaseHelper(content,<span class="hljs-keyword">null</span>,<span class="hljs-string">"testDb"</span>,<span class="hljs-number">1</span>);
+            <span class="hljs-comment">//注入helper对象到dao中    </span>
+            BaseDao dao = <span class="hljs-keyword">new</span> BaseDao(helper);            
+            <span class="hljs-comment">//封装字段键值对</span>
+            ContentValues contentCalues = <span class="hljs-keyword">new</span> ContentValues();
+            contentValues.put(<span class="hljs-string">"num"</span>, <span class="hljs-string">"0000000003"</span>);
+            contentValues.put(<span class="hljs-string">"name"</span>, <span class="hljs-string">"小明"</span>);
+            contentValues.put(<span class="hljs-string">"password"</span>, <span class="hljs-string">"123456"</span>);
+            contentValues.put(<span class="hljs-string">"avatar"</span>, <span class="hljs-string">"http://www.baidu.com"</span>);
+            contentValues.put(<span class="hljs-string">"sex"</span>, <span class="hljs-string">"男"</span>);
+            contentValues.put(<span class="hljs-string">"birthday"</span>, <span class="hljs-string">"19970119"</span>);
+            contentValues.put(<span class="hljs-string">"college"</span>, <span class="hljs-string">"计算机学院"</span>);
+            contentValues.put(<span class="hljs-string">"subject"</span>, <span class="hljs-string">"软件工程"</span>);
+            contentValues.put(<span class="hljs-string">"grade"</span>, <span class="hljs-number">2015</span>);
+            contentValues.put(<span class="hljs-string">"class"</span>, <span class="hljs-number">3</span>);
+                        
+            <span class="hljs-comment">//调用插入方法，传入表名和字段键值对</span>
+            dao.insert(<span class="hljs-string">"User"</span>,contentValues);
+        }
+    
+}
+        
+</div></code></pre>
+<p><em>有必要的时候可以获取返回的Boolean值来判断否操作成功</em></p>
+<h4 id="update-%E4%BF%AE%E6%94%B9%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%AD%90">update 修改操作例子</h4>
+<p>修改操作与插入操作有些不一样，因为修改操作需要定位到需要被修改的数据，所以我们需要添加约束条件。
+<em>如果不加约束条件的话这次的修改将影响整个数据表的数据</em></p>
+<pre class="hljs"><code><div>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span></span>{
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(@Nullable Bundle savedInstanceState)</span> </span>{
+            <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+            setContentView(R.layout.main_activity);
+            <span class="hljs-comment">//创建OpenHelper的对象</span>
+            BaseHelper helper = <span class="hljs-keyword">new</span> BaseHelper(content,<span class="hljs-keyword">null</span>,<span class="hljs-string">"testDb"</span>,<span class="hljs-number">1</span>);
+            <span class="hljs-comment">//注入helper对象到dao中    </span>
+            BaseDao dao = <span class="hljs-keyword">new</span> BaseDao(helper);            
+            <span class="hljs-comment">//封装字段键值对</span>
+            ContentValues contentCalues = <span class="hljs-keyword">new</span> ContentValues();
+            contentValues.put(<span class="hljs-string">"name"</span>, <span class="hljs-string">"小丽"</span>);
+            contentValues.put(<span class="hljs-string">"password"</span>, <span class="hljs-string">"789456"</span>);
+            contentValues.put(<span class="hljs-string">"sex"</span>, <span class="hljs-string">"女"</span>);
+            
+            <span class="hljs-comment">//修改所有数据的对应值</span>
+            dao.update(<span class="hljs-string">"User"</span>,contentValues,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"0000000003"</span>};
+            <span class="hljs-comment">//调用dao类的修改方法</span>
+            <span class="hljs-comment">//修改所有num=0000000003的数据。修改ContentValues中有的字段成相对应的值</span>
+            dao.update(<span class="hljs-string">"User"</span>,contentValues,<span class="hljs-string">"num=?"</span>,args);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"男"</span>,<span class="hljs-string">"计算机学院"</span>};
+            <span class="hljs-comment">//调用dao类的修改方法</span>
+            <span class="hljs-comment">//修改所有计算机学院的男塾的数据。修改ContentValues中有的字段成相对应的值</span>
+            dao.update(<span class="hljs-string">"User"</span>,contentValues,<span class="hljs-string">" sex = ? AND college = ?"</span>,args);
+            
+        }
+    
+}
+
+</div></code></pre>
+<h4 id="delete-%E4%BF%AE%E6%94%B9%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%AD%90">delete 修改操作例子</h4>
+<p>删除操作就和修改操作类似，因为要定位数据，所以需要约束条件
+<em>如果不添加约束条件将删除表上所有的数据</em></p>
+<pre class="hljs"><code><div>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span></span>{
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(@Nullable Bundle savedInstanceState)</span> </span>{
+            <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+            setContentView(R.layout.main_activity);
+            <span class="hljs-comment">//创建OpenHelper的对象</span>
+            BaseHelper helper = <span class="hljs-keyword">new</span> BaseHelper(content,<span class="hljs-keyword">null</span>,<span class="hljs-string">"testDb"</span>,<span class="hljs-number">1</span>);
+            <span class="hljs-comment">//注入helper对象到dao中    </span>
+            BaseDao dao = <span class="hljs-keyword">new</span> BaseDao(helper);           
+            
+            <span class="hljs-comment">//删除所有数据的对应值</span>
+            dao.delete(<span class="hljs-string">"User"</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"0000000003"</span>};
+            <span class="hljs-comment">//调用dao类的删除方法</span>
+            <span class="hljs-comment">//删除所有num=0000000003的数据</span>
+            dao.delete(<span class="hljs-string">"User"</span>,<span class="hljs-string">"num=?"</span>,args);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"男"</span>,<span class="hljs-string">"计算机学院"</span>};
+            <span class="hljs-comment">//调用dao类的删除方法</span>
+            <span class="hljs-comment">//删除所有计算机学院的男塾的数据。</span>
+            dao.delete(<span class="hljs-string">"User"</span>,<span class="hljs-string">" sex = ? AND college = ?"</span>,args);
+            
+        }
+    
+}
+     
+
+</div></code></pre>
+<h4 id="select-%E4%BF%AE%E6%94%B9%E6%93%8D%E4%BD%9C%E4%BE%8B%E5%AD%90">select 修改操作例子</h4>
+<p>查找操作更不用说了，因为要定位数据，所以需要约束条件
+<em>如果不添加约束条件将查询表上所有的数据</em></p>
+<pre class="hljs"><code><div>
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MainActivity</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">AppCompatActivity</span></span>{
+    <span class="hljs-meta">@Override</span>
+        <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">onCreate</span><span class="hljs-params">(@Nullable Bundle savedInstanceState)</span> </span>{
+            <span class="hljs-keyword">super</span>.onCreate(savedInstanceState);
+            setContentView(R.layout.main_activity);
+            <span class="hljs-comment">//创建OpenHelper的对象</span>
+            BaseHelper helper = <span class="hljs-keyword">new</span> BaseHelper(content,<span class="hljs-keyword">null</span>,<span class="hljs-string">"testDb"</span>,<span class="hljs-number">1</span>);
+            <span class="hljs-comment">//注入helper对象到dao中    </span>
+            BaseDao dao = <span class="hljs-keyword">new</span> BaseDao(helper);         
+            
+            <span class="hljs-comment">//新建一个list对象，用于存放查询到的数据</span>
+            List&lt;Map&gt; mapList = <span class="hljs-keyword">new</span> ArrayList();
+            
+            select(String table, String[] columns, String selection,
+                                        String[] selectionArgs, String groupBy, String having,
+                                        String orderBy)
+            <span class="hljs-comment">//查询表上所有数据</span>
+            mapList = dao.select(<span class="hljs-string">"User"</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"0000000003"</span>};
+            <span class="hljs-comment">//调用dao类的删除方法</span>
+            <span class="hljs-comment">//查询所有num=0000000003的数据</span>
+            dao.select(<span class="hljs-string">"User"</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">"num=?"</span>,args,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+            
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"男"</span>,<span class="hljs-string">"计算机学院"</span>};
+            <span class="hljs-comment">//调用dao类的删除方法</span>
+            <span class="hljs-comment">//查询所有计算机学院的男塾的数据。</span>
+            dao.select(<span class="hljs-string">"User"</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">" sex = ? AND college = ?"</span>,args,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+    
+            <span class="hljs-comment">//约束条件的对应值</span>
+            String args1[] = {<span class="hljs-string">"男"</span>,<span class="hljs-string">"计算机学院"</span>};
+            <span class="hljs-comment">//调用dao类的删除方法</span>
+            <span class="hljs-comment">//查询所有计算机学院的男塾的数据。</span>
+            dao.select(<span class="hljs-string">"User"</span>,<span class="hljs-keyword">null</span>,<span class="hljs-string">" sex = ? AND college = ?"</span>,args,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>,<span class="hljs-keyword">null</span>);
+    }
+    
+}
+     
+
+</div></code></pre>
+<h2 id="%E6%80%BB%E7%BB%93%EF%BC%9A">总结：</h2>
+<p>数据库的操作在Android里面举足轻重，一个好的数据库操作类的封装可以省去很多不必要的麻烦</p>
+
+</body>
+</html>
