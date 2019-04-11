@@ -40,6 +40,12 @@ Activity的优先级：
 2. 可见但是非前台Activity---比如Activity弹出了一个对话框，虽然无法与用户交互，但是依旧可见
 3. 后台Activity---已被暂停的Activity，比如执行了onStop()的Activity
 
+### 3.3、情况三：打开新的Activity
+
+1. 当前 Activity onPause()
+2. 新 Activity onCreate() -> onStart() -> onResume()
+3. 旧 Activity onSaveInstance() -> onStop()
+
 *PS：其生命周期过程与第一种情况相同*
 
 ## 4、Activity的启动模式

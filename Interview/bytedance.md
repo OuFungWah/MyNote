@@ -46,10 +46,10 @@
 
 ### 算法：
 
-* 冒泡排序及优化
+* 冒泡排序及优化 ✅
 * 归并排序
-* 快速排序
-* 减治法
+* 快速排序 ✅
+* 减治法                                                      
 * 动态规划--最长递增子序列
 * 动态规划--最长公共子序列
 * 最优二叉查找树
@@ -70,7 +70,7 @@
 
 ### 设计模式：
 
-* 单例模式
+* 单例模式 ✅
 * 工厂模式
 * 建造者模式
 * 适配器模式
@@ -86,14 +86,20 @@
 
 ### Android
 
-* Context的理解
-* 服务的使用及区别
-* Fragment 生命周期
-* Activity 生命周期
-* Android Canvas
-* Android View 的事件传递
-* Android View 的测量以及绘制过程
-* Android RecyclerView 的原理及优化
-* Android 图片加载 Fresco + Glide 原理及区别
+* Android 启动过程 与 App 启动过程 ✅v
+* Context的理解 ✅
+* 服务的使用及区别 ✅ 
+* Fragment 生命周期 ✅
+* Activity 生命周期 ✅
+* Android Canvas ✅
+* Android View 的事件传递 ✅
+* Android View 的测量以及绘制过程 ✅
+* Android RecyclerView 的原理及优化 ✅
+* Android 图片加载 Fresco + Glide 原理及区别 ✅
 * Android 网络请求 OkHttp + Volley 原理及区别
+* Android 动画原理 ✅
 * Android 的跨线程与跨进程
+* Android ContentProvider ✅
+* Android Intent
+* Android Binder 
+* Androi AsyncTask ✅

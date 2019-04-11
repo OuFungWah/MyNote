@@ -2,7 +2,31 @@
 
 ## 生命周期
 
+```java
+
+onAttach();
+onCreate();
+onCreateView();
+onStart();
+onResume();
+onPause();
+onStop();
+onDestoryView();
+onDestory();
+onDetach();
+
+```
+
 ### 初次启动
+
+1. A-onCreate()
+2. A-onStart()
+3. F-onAttach()
+4. F-onCreate()
+5. F-onCreateView()
+6. F-onStart()
+7. A-onResume()
+8. F-onResume()
 
 总的来说，先 A-onStart() 再跑 F-onAttach()、F-onCreate()、F-onCreateView()、F-onStart() 最后先 A-onResume()、F-onResume()
 
@@ -29,6 +53,13 @@ A-onPause()、F-onPause()、A-onStop()、F-onStop()
 ```
 
 ### 从后台恢复（未销毁）
+
+1. A-onRestart();
+2. A-onStart()
+3. F-onStart()
+4. A-onResume()
+5. F-onResume()
+
 ```
 08-21 16:29:37.718 14680-14680/com.example.crazywah.fragmentlivecycledemo D/MainActivity: onRestart: Activity executed
 08-21 16:29:37.720 14680-14680/com.example.crazywah.fragmentlivecycledemo D/MainActivity: onStart: Activity executed
