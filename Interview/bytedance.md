@@ -86,7 +86,7 @@
 
 ### Android
 
-* Android 启动过程 与 App 启动过程 ✅v
+* Android 启动过程 与 App 启动过程 ✅
 * Context的理解 ✅
 * 服务的使用及区别 ✅ 
 * Fragment 生命周期 ✅
@@ -102,4 +102,6 @@
 * Android ContentProvider ✅
 * Android Intent
 * Android Binder 
-* Androi AsyncTask ✅
+* Android AsyncTask ✅
+* Android ART & Dalvik
+* Android 平台架构 ✅
