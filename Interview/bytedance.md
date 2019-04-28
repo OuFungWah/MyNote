@@ -42,9 +42,11 @@
 ### Java
 
 * Java 跨进程跨线程通讯 ✅
+* Java 文件操作并发 ✅
 * 继承与多态 ✅
+* 深浅克隆 ✅
 
-### 算法：
+### 算法： 
 
 * 冒泡排序及优化 ✅
 * 归并排序
@@ -88,7 +90,7 @@
 
 * Android 启动过程 与 App 启动过程 ✅
 * Context的理解 ✅
-* 服务的使用及区别 ✅ 
+* 服务的使用及区别 ✅  
 * Fragment 生命周期 ✅
 * Activity 生命周期 ✅
 * Android Canvas ✅
@@ -101,7 +103,12 @@
 * Android 的跨线程与跨进程
 * Android ContentProvider ✅
 * Android Intent
-* Android Binder 
+* Android Binder ✅
 * Android AsyncTask ✅
 * Android ART & Dalvik
 * Android 平台架构 ✅
+
+
+## 结果
+
+### 1、
