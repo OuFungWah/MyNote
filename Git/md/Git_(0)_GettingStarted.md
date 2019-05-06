@@ -55,7 +55,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 2. 修改：
 
-```git config [--system|--global] core.editor [vim|nano|emacs|编辑器名称]```
+```git config [--system|--global] core.editor <vim|nano|emacs|编辑器名称>```
 
 ***查看所有配置：**
 
@@ -73,7 +73,7 @@ Git 的配置都存放在 config 文件中，一共有三个级别的 config：�
 
 ## 三、添加跟踪文件
 
-为了让 Git 知道我们需要跟踪哪些文件，我们使用：```git add [文件]```来添加跟踪文件
+为了让 Git 知道我们需要跟踪哪些文件，我们使用：```git add <文件>```来添加跟踪文件
 
 列举一下常用的：
 
@@ -127,7 +127,7 @@ ssh协议：```git@github.com:Username/XXXproject.git```
 
 先给远端链接一个代号，方便使用
 
-使用 `git remote add [代号] 链接地址` 来给远端的链接一个代号名称，
+使用 `git remote add <代号> 链接地址` 来给远端的链接一个代号名称，
 
 通常：
 
@@ -137,7 +137,7 @@ ssh协议：```git@github.com:Username/XXXproject.git```
 
 ## 七、推送本地提交至远端
 
-将本地的分支推送并关联到远端我们使用 `git push -u [远端代号|远端链接] 分支名 `
+将本地的分支推送并关联到远端我们使用 `git push -u <远端代号|远端链接> 分支名 `
 
 如：
 
