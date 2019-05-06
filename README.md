@@ -50,5 +50,5 @@
 
 ### 4. [Git 学习笔记](https://github.com/OuFungWah/MyNote/tree/master/Git/md)
 
-* [Git 总结 -- 创建并上传项目至 Git 仓库](https://github.com/OuFungWah/MyNote/blob/master/Git/md/InitGitProject.md)
-#### 4.1 [Git 入门](https://github.com/OuFungWah/MyNote/blob/master/Git/md/InitGitProject.md)
+* [Git(0) 入门](https://github.com/OuFungWah/MyNote/blob/master/Git/md/Git_(0)_GettingStarted.md)
+* [Git(1) 基础知识](https://github.com/OuFungWah/MyNote/blob/master/Git/md/Git_(1)_Basic.md)
