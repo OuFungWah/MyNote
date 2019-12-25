@@ -767,3 +767,6 @@ boolean enqueueMessage(Message msg, long when) {
 ![Android消息机制流程图](Picture/AndroidMessageSummary.png)
 
 如果以上总结有任何错漏之处非常欢迎各位在issue处提出错误处
+
+## 番外
+面试中被面试官问到了一点：如果 Looper 的线程睡了 10 秒，那么本应该在这期间执行的事件会如何执行呢？大家不妨思考一下
