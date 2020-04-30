@@ -26,7 +26,7 @@ gradle wrapper --gradle-version 2.4
 gradle wrapper --gradle-distrubution-url https://services.gradle.org/distributions/gradle-6.4-rc-3-bin.zip
 ```
 
-以上的 Url 是从 Gradle 的官方 distribution 链接中获取的，如果大家有需要可以到上面找自己合适的版本。**而这个配置选项的本意是如果 Gradle 官方地址万一遭遇封禁可以试着用其他可以访问到的路径进行下载**。
+以上的 Url 是从 Gradle 的[官方 distribution](https://services.gradle.org/distributions/) 中获取的，如果大家有需要可以到上面找自己合适的版本。**而这个配置选项的本意是如果 Gradle 官方地址万一遭遇封禁可以试着用其他可以访问到的路径进行下载**。
 
 ## 2、Gradle Wrapper 的配置文件 gradle-wrapper.properties 的内容
 
