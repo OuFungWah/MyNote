@@ -52,3 +52,8 @@
 
 * [Git(0) 入门](https://github.com/OuFungWah/MyNote/blob/master/Git/md/Git_(0)_GettingStarted.md)
 * [Git(1) 基础知识](https://github.com/OuFungWah/MyNote/blob/master/Git/md/Git_(1)_Basic.md)
+
+### 5. [Gradle 学习笔记](https://github.com/OuFungWah/MyNote/tree/master/Gradle)
+
+* [Gradle(0) 入门](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_startup.md)
+* [Gradle(1) GradleWrapper 相关配置](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_Wrapper.md)
