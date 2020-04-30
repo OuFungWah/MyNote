@@ -51,10 +51,12 @@ gradle wrapper
     --- gradle
         --- wrapper
             --- gradle-wrapper.jar              <--- gradlew 这个可执行文件只是负责调用，实际的业务逻辑全是调用的这个 jar 里面的内容
-            --- gradle-wrapper.properties       <--- 当前 gradle 工程的 gradle 相关配置（具体相关内容可以参考[Gradle Wrapper 相关配置](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_Wrapper.md)）
+            --- gradle-wrapper.properties       <--- 当前 gradle 工程的 gradle 相关配置
     --- gradlew         <--- Linux/Mac 下的可执行文件
     --- gradlew.bat     <--- Windows 下的可执行文件
 ```
+
+***（Gradle Wrapper 的具体相关内容可以参考[Gradle Wrapper 相关配置](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_Wrapper.md)）***
 
 至此新的 gradle 项目就可以开始使用了。
 
