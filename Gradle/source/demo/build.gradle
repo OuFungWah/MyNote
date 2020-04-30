@@ -1,0 +1,3 @@
+task firstTask{
+    println 'My first gradle code!!'
+}
