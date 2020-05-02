@@ -1,3 +1,32 @@
 task firstTask{
     println 'My first gradle code!!'
+    method{ a, b ->
+        a + b
+    }
+
+    def numbers = [1, 2, 3, 4, 5]
+    println numbers.get(0)
+    // for(def n = 0; n < numbers.size(); n++){
+    //     println numbers[n]
+    // }
+
+    // def ageMap = ["Tom": 11, "Amy": 12]
+    // ageMap.each{
+    //     println "pair: ${it}"
+    //     println "key = ${it.key}"
+    //     println "value = ${it.value}"
+    // }
+
+    def closure = { int a, int b ->
+        a + b
+    }
+
+    println closure(1, 2)
+
+}
+
+// 方法的定义
+def method(m){
+    // 闭包的定义和使用（类似 Kotlin 的高阶函数）
+    println m(1, 2)
 }
