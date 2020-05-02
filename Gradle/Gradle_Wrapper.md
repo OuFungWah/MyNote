@@ -1,5 +1,7 @@
 # Gradle Wrapper 相关配置
 
+***@Author oufenghua***
+
 ## 0、前言
 
 > 使用 ```gradle wrapper``` 命令行可以新建一个标准的 Gradle 工程

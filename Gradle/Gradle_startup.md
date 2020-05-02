@@ -1,4 +1,7 @@
 # Gradle 入门
+
+***@Author oufenghua***
+
 ## 什么是 Gradle？
 
 Gradle 是一款非常优秀的构建系统工具，在 Android 中主要就是透过 Gradle 来串联所有的模块，所以学习 Gradle 在 Android 中十分的有必要。

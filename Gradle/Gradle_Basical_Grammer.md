@@ -1,5 +1,7 @@
 # Gradle 基础语法 
 
+***@Author oufenghua***
+
 要能够读懂或者编写 Gradle 脚本，必要的语法基础还是需要先学习一下。
 
 ## 一、变量
