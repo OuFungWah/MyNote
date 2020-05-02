@@ -57,3 +57,4 @@
 
 * [Gradle(0) 入门](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_startup.md)
 * [Gradle(1) GradleWrapper 相关配置](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_Wrapper.md)
+* [Gradle(2) Gradle 基础语法](https://github.com/OuFungWah/MyNote/blob/master/Gradle/Gradle_Basical_Grammer.md)
