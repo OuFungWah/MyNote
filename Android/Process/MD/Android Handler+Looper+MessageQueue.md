@@ -770,3 +770,60 @@ boolean enqueueMessage(Message msg, long when) {
 
 ## 番外
 面试中被面试官问到了一点：如果 Looper 的线程睡了 10 秒，那么本应该在这期间执行的事件会如何执行呢？大家不妨思考一下
+
+解答：
+
+其实虽然 Message 是一个伪队列，但是在 next() 的时候 Message 在调用 messgae.next() 以后并不是无脑外抛的，而是做了一次时间比较，看看消息的 msg.when 和当前时间 now 谁更大，然后再外抛的
+
+```java
+class MessageQueue{
+	Message next() {
+		...
+		for (;;) {
+		    synchronized (this) {
+			final long now = SystemClock.uptimeMillis();
+			Message prevMsg = null;
+			Message msg = mMessages;
+			...
+			if (msg != null) {
+			    // 这个就是关键的时间判断代码 <------------!!!!!!!!!!!!!!!!!!!!
+			    if (now < msg.when) {
+				// Next message is not ready.  Set a timeout to wake up when it is ready.
+			    } else {
+				// Got a message.
+				...
+				return msg;
+			    }
+			} else {
+			    // No more messages.
+			    ...
+			}
+			...
+		    }
+		    ...
+		}
+	    }
+}
+```
+
+既然知道了 Looper 怎么拿到一个消息，那就好办了，我们看看消息的 msg.when 怎么来就可以破案了：
+
+```java
+class Handler{
+    public final boolean sendMessageDelayed(Message msg, long delayMillis){
+        if (delayMillis < 0) {
+            delayMillis = 0;
+        }
+	// 留意这里根据当前时间计算了一次当前 Message 准确的运行时间 <--------------------!!!!
+        return sendMessageAtTime(msg, SystemClock.uptimeMillis() + delayMillis);
+    }
+
+    public boolean sendMessageAtTime(Message msg, long uptimeMillis) {
+        ...
+	// 消息直接以 udateMillis 入消息队列了 <--------------------!!!!
+        return enqueueMessage(queue, msg, uptimeMillis);
+    }
+}
+```
+
+所以破案了！如果线程睡了十秒钟，这期间本该执行的 Message 会在线程重新醒来的时候全部执行！🤪
