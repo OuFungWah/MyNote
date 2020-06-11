@@ -18,94 +18,68 @@ Android的消息机制主要由Handler、Looper和MessageQueue相互协助。本
 经过几天的源码阅读，我大致地摸清楚了Android的
 Handller+Looper+MessageQueue合作的消息机制，可总结为以下这幅流程图：
 
-Android 消息队列机制.jpg
 ![Android消息机制流程图](https://user-gold-cdn.xitu.io/2020/6/11/172a1e198c08e1ae?w=1038&h=949&f=png&s=125005)
 
 最后面还有一个面试被问到的有意思的问题，不看正文也建议去看看。
 
------
-
-## 目录：
-1. 机制简述
-	1. Handler（处理器）：开发时最常接触到的上层控件
-	2. Looper（循环器）
-	3. Message（消息）
-	4. MessageQueue（消息队列）
-2. 源码分析
-	1. Looper 源码分析
-		1. Looper的惯常用法
-		2. Looper的prepare()源码
-		3. Looper的loop()源码
-	2. Handler 源码分析
-		1. Handler的惯常用法
-		2. Handler构造函数源码
-		3. Handler的事件分发
-		4. Handler的各种send方法
-			1. sendEmptyMessage(int what)
-			2. sendEmptyMessageDelayed(int what, long delayMillis)
-			3. sendMessageDelayed(Message msg, long delayMillis)
-			4. sendMessageAtTime(Message msg, long uptimeMillis)
-			5. enqueueMessage(MessageQueue queue, Message msg, long uptimeMillis)
-		5. Handler的各种Post方法
-			1. post(Runnable r)
-			2. postAtTime(Runnable r, long uptimeMillis)
-			3. postDelayed(Runnable r, long delayMillis)
-			4. getPostMessage(Runnable r)
-	3. Message 源码分析
-		1. Message的结构
-		2. Message的对象获取
-	4. MessageQueue 源码分析
-		1. next()
-		2. enqueueMessage(Message msg, long when)
-3. 总结
-4. 番外
-
 ------
 
 ## 1、机制简述
+
 以下控件全部都是在android.os包之下的
-### 1.1、Handler（处理器）：开发时最常接触到的上层控件
 
-* 每个Handler对象对应一个相关联的线程（Thread）和一个相关的消息队列（MessageQueue）。
-* 处理器会捆绑在创建它的线程上
-* Handler会将Message和Runnable交付到对应的MessageQueue上运行
+### 1.1、Handler（处理器）：开发时最常接触到的控件
+Handler 的一些特点：
 
-* Handler有两个主要用途
-	1. 统筹调度即将要执行的Runnable和Messages
-	2. 将要跨线程执行的动作加入队列
+* 每个 Handler 对象对应一个创建时所处线程相关联的循环器（Looper）
+* Handler 会将 Message 交付到对应 Looper 上运行
 
-* 我们可以通过`post(Runnable)`, `postAtTime(Runnable, long)`, `postDelayed(Runnable, Object, long)`, `sendEmptyMessage(int)`, `sendMessage(Message)`, `sendMessageAtTime(Message, long)`, 和 `sendMessageDelayed(Message, long)`方法来安排Message加入队列中。post开头的这些方法是用于指定你自己定义的Runnable加入队列中的。send开头的这些方法是用于你将数据封装到Bundle中并绑定在Message对象中然后由Handler中的handleMessage()方法进行处理。（当然，你必须先实现Handler的这个方法）
+什么时候会用到 Handler 呢？一般在我们需要要跨线程执行动作的时候
 
-当应用的进程创建时，它的主线程，即用于管理最高级应用对象（如：activity、broadcast、service等）和任何由这些对象所创建的视窗的线程将用于运行MessageQueue消息队列。（说白了就是MessageQueue默认时运行在UI线程上的）。你可以通过Handler进行子线程和UI线程之间的通信。只需要在你的子线程上调用handler的send或post方法即可。你发送至Handler的Message或者Runnable将会在合适的时候被调度至消息队列并且处理。
+怎么用呢？
+* 我们可以通过以下方法来安排 Message 加入到 MessageQueue 队列中。
+    * `post(Runnable)`
+    * `postAtTime(Runnable, long)`
+    * `postDelayed(Runnable, Object, long)`
+    * `sendEmptyMessage(int)`
+    * `sendMessage(Message)`
+    * `sendMessageAtTime(Message, long)`
+    * `sendMessageDelayed(Message, long)`
+* post 开头的这些方法是用于指定你自己定义的 Runnable，方法内部帮你把 Runnbale 包装在 Message 中再加入队列中的。当消息需要被执行来到 Handler 中的 dispatchMessage() 方法并发现有 runnable 时（Message.callback 字段）会直接执行 runnable。
+* send 开头的这些方法是用于将数据封装到 Bundle 中并绑定在 Message 对象中然后由 Handler 中的 dispatchMessage() 分发，传入的回调接口的 handleMessage() 方法进行处理。如果回调接口没有处理会调用 Handler 的 handleMessage() 方法进行处理（当然，你必须先实现 Handler 的这个方法）
+* 注意一点：当 Message 有 Runnable 的时候，handleMessage 是不会被出发的，留意
 
 ### 1.2、Looper（循环器）
 
-Looper是将绑定的线程用作循环运作Message的循环器。线程是默认没有消息循环器关联的，如果想要创建一个线程用作循环运作Message，在创建的线程运行之初调用Looper.prepare();然后调用Looper.loop();方法让线程开始循环处理消息直至Looper.end();被执行，结束这个线程的循环器（或线程被终止）。
-
-许多和消息循环队列的交互通常是通过Handler实现的
+Looper 是 Message 的循环器，使其所绑定的线程循环执行 message 中的 Runnable 或执行 Handler 的 callback.handleMessage() 方法或自身 Handler 自身的 handleMessage() 方法。线程是默认没有消息循环器关联的，如果想要创建一个线程用作循环器，需要以下步骤：
+1. 在创建的线程运行之初调用 Looper.prepare();
+2. 然后调用 Looper.loop(); 方法让线程开始循环处理消息
+3. 若干时间后当不再需要时可以调用 Looper.end(); 结束这个线程的循环器（或线程被终止）。
 
 ### 1.3、Message（消息）
 
 定义一个具有必要的属性和任意类型的数据的Message对象可以发送至Handler。该对象包括两个额外的int类型变量和一个Object类型变量在许多情况下可供自定义分配。
 
-虽然Message的构造函数是对外开放的，但是官方建议我们多使用obtain()方法来获取Message的对象
+虽然Message的构造函数是对外开放的，但是官方建议我们多使用obtain()方法来获取Message 的对象，以复用久的 Message 对象，一定程度上减轻创建对象带来的性能开销。
 
 ### 1.4、MessageQueue（消息队列）
 
-由Looper分配调度、用于管理Message队列的最高级类。Message并不是直接添加到MessageQueue中的，而是通过Handler对象关联至Looper。
+由 Looper 主动调用、用于管理 Message 队列的类。Message 经过 Handler 的入队操作会加入到 Looper 所拥有的 MessageQueue 中。
 
-你可以通过调用Looper.myQueue()来获取当前线程相关联的MessageQueue
+你可以通过调用 Looper.myQueue() 来获取当前线程相关联的 Looper 的 MessageQueue
 
 
 ## 2、源码分析
 
 ### 2.1、Looper 源码分析
 
-#### 2.1.1、Looper的惯常用法
+#### 2.1.1、Looper 的惯常用法
 
-1. 创建一个装载Looper的线程
-2. 在需要被制作为消息循环器的线程开始时调用Looper.prepare();为线程创建Looper对象
-3. 在所有初始化完成后调用Looper.loop();开始循环执行消息队列。
+1. 创建一个装载 Looper 的线程
+2. 在需要被制作为消息循环器的线程开始时调用 `Looper.prepare();` 为线程创建 Looper 对象
+3. 在所有初始化完成后调用 `Looper.loop();` 开始循环执行消息队列。
+
+Demo 代码
 
 ```java
 	class LooperThread extends Thread {
@@ -113,7 +87,6 @@ Looper是将绑定的线程用作循环运作Message的循环器。线程是默�
 
       	public void run() {
           	Looper.prepare();
-
          	 mHandler = new Handler() {
              	 public void handleMessage(Message msg) {
                   	// process incoming messages here
@@ -124,12 +97,12 @@ Looper是将绑定的线程用作循环运作Message的循环器。线程是默�
   	}
 ```
 
-#### 2.1.2、Looper的prepare()源码
-Looper的构造函数被私有了，唯一能创建Looper对象的方法就是调用prepare()方法了
+#### 2.1.2、Looper 的 prepare()源码
+Looper 的构造函数被私有了，唯一能创建 Looper 对象的方法就是调用 prepare() 方法了
 
 ```java
 	/**
-	 * 将当前线程初始化为一个Looper(循环器)，而后你可以在Looper调用loop()之前创建一个或多个Handler对象来引用这个Looper。
+	 * 将当前线程初始化为一个 Looper (循环器)，而后你可以在当前线程创建一个或多个 Handler 对象来引用这个 Looper。
 	 * 
 	 * 必须在调用Looper.loop()之前先调用Looper.prepare()
 	 *
@@ -148,7 +121,7 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
     }
 
     /**
-     * 初始化当前Looper对象的：
+     * 初始化当前 Looper 对象：
      * 1. 创建消息队列
      * 2. 绑定当前线程对象
      */
@@ -159,8 +132,8 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 
 ```
 
-#### 2.1.3、Looper的loop()源码
-当为线程绑定好Looper（调用prepare()）并创建好Handler以后，我们就可以让Looper开始循环执行Message
+#### 2.1.3、Looper 的 loop() 源码
+当为线程绑定好 Looper（调用prepare()）并创建好 Handler 以后，我们就可以让 Looper 开始循环执行 Message
 
 ```java
 	/**
@@ -173,32 +146,22 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
             throw new RuntimeException("No Looper; Looper.prepare() wasn't called on this thread.");
         }
         final MessageQueue queue = me.mQueue;
-
         ...
-
-        //使用死循环来运行消息队列
+        //使用死循环来遍历消息队列，挑出需要执行的 Message 并分发
         for (;;) {
-            Message msg = queue.next(); // 可能会阻塞线程
+            // 取到一条需要分发的 Message
+            Message msg = queue.next();
             if (msg == null) {
                 return;
             }
-
             ...
-
-            //给信息对应的目标Handler分配Message
             try {
-            	//调用信息绑定的目标Handler的dispatchMessage(msg)
+            	//调用 message 所绑定的目标 Handler 的 dispatchMessage(msg) 方法，由 Handler 决定怎么操作
                 msg.target.dispatchMessage(msg);
-                end = (slowDispatchThresholdMs == 0) ? 0 : SystemClock.uptimeMillis();
-            } finally {
-                if (traceTag != 0) {
-                    Trace.traceEnd(traceTag);
-                }
+                ...
             }
-            
             ...
-
-            //将已处理完成的信息回归初始化，信息对象复用
+            //将已处理完成的 Message 对象重新初始化，等待复用
             msg.recycleUnchecked();
         }
     }
@@ -208,8 +171,8 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 
 #### 2.2.1、Handler的惯常用法
 
-1. 在需要使用到Handler的Looper线程中新建一个Handler（在Activity中新建的就是在UI线程中）
-2. 定义CallBack接口
+1. 在需要使用到 Handler 的线程中新建一个 Handler（在 Activity 的生命周期内创建的 Handler 将绑定在 UI 线程的 Looper 上）
+2. 定义并传入 CallBack 对象，用于处理分发回来的 Message
 3. 在需要通知线程进行操作的时候调用 Handler 的 send 方法或 post 方法。（若是`send`类型的方法将会调用`CallBack`的`handlerMessage(Message msg)`、若是`post`类型的方法将会调用`post`时传递的`Runnable`对象中的`run()`方法）
 
 ```java
@@ -227,12 +190,12 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 ```
 
 #### 2.2.2、Handler构造函数源码
-在使用Handler之前我们需要通过new获取Handler对象，那么Handler的构造函数都做了些什么呢
+在使用 Handler 之前我们需要通过 new 获取 Handler 对象，那么 Handler 的构造函数都做了些什么呢
 
 ```java
 	
 	/**
-	 * 该构造函数是默认同步状态，调用Handler(Callback callback, boolean async)创建Hanlder对象
+	 * 该构造函数是默认同步状态，调用 Handler(Callback callback, boolean async) 创建 Hanlder 对象
 	 */
     public Handler(Callback callback) {
         this(callback, false);
@@ -240,22 +203,14 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 
 	/**
 	 * 初始化：
-	 * 1. 获取线程中的Looper对象
-	 * 2. 注入Handler中的CallBack对象
+	 * 1. 获取线程中的 Looper 对象
+	 * 2. 注入 Handler 中的 CallBack 对象
 	 * 3. 初始化是否异步执行的flag
 	 *
-	 * Handler如果没有设置为异步的话，默认情况下是同步执行的
+	 * Handler 如果没有设置为异步的话，默认情况下 Message 的 Runnable 是同步执行的
 	 */
     public Handler(Callback callback, boolean async) {
-        if (FIND_POTENTIAL_LEAKS) {
-            final Class<? extends Handler> klass = getClass();
-            if ((klass.isAnonymousClass() || klass.isMemberClass() || klass.isLocalClass()) &&
-                    (klass.getModifiers() & Modifier.STATIC) == 0) {
-                Log.w(TAG, "The following Handler class should be static or leaks might occur: " +
-                    klass.getCanonicalName());
-            }
-        }
-
+        ...
         //获取当前线程的线程共享Looper对象
         mLooper = Looper.myLooper();
         //如果当前线程共享变量中没有Looper对象则抛出异常
@@ -275,48 +230,46 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 #### 2.2.3、Handler的事件分发
 
 ```java
-	/**
-     * 处理系统信息的方法
-     */
+	/** 处理系统信息的方法 */
     public void dispatchMessage(Message msg) {
     	//如果Message有callback，则直接运行它的CallBack（即Runnable）对象
         if (msg.callback != null) {
             handleCallback(msg);
         } else {
-        	//如果有注入的CallBack对象则执行注入的CallBack对象的handleMessage()方法
+        	//如果有注入的 CallBack 对象则执行注入的 CallBack 对象的 handleMessage() 方法
             if (mCallback != null) {
                 if (mCallback.handleMessage(msg)) {
                     return;
                 }
             }
+            // 如果注入的 CallBack 拦截了，Handler 的 HandleMessage 方法将不会触发，反之则会被触发
             handleMessage(msg);
         }
     }
 
     /**
-     * 运行Message的callback
+     * 运行 Message 的 callback
      */
 	private static void handleCallback(Message message) {
         message.callback.run();
     }
-
 ```
 
-#### 2.2.4、Handler的各种send方法
+#### 2.2.4、Handler 的各种 send 方法
 
 ##### 2.2.4.1、sendEmptyMessage(int what)
 即时发送空信息至消息队列
 
 ```java
 	/**
-     * 发送一条仅包含what属性的Message
+     * 发送一条仅包含 what 属性的 Message
      * 
-     * 返回值为Boolean值，表示是否发送成功。
+     * 返回值为 Boolean 值，表示是否发送成功。
      * 一般情况下，发送失败是因为当前Looper的消息队列正在退出
      */
     public final boolean sendEmptyMessage(int what)
     {
-    	//0延迟后发送信息
+    	//当下发送消息
         return sendEmptyMessageDelayed(what, 0);
     }
 ```
@@ -326,8 +279,8 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 
 ```java
 	/**
-     * 延迟delayMillis毫秒后发送仅包含what属性的Message
-     * 返回值为Boolean值，表示是否发送成功。
+     * 延迟 delayMillis 毫秒后发送仅包含 what 属性的 Message
+     * 返回值为 Boolean 值，表示是否发送成功。
      * 一般情况下，发送失败是因为当前Looper的消息队列正在退出
      */
     public final boolean sendEmptyMessageDelayed(int what, long delayMillis) {
@@ -347,7 +300,7 @@ Looper的构造函数被私有了，唯一能创建Looper对象的方法就是�
 ```java
 	/**
      * 将消息入队并排列在目标时间(uptimeMillis)以前的任务之后。
-	 * 该信息将会在对应的时间，被绑定好的handler对象中接收并传入handleMessage(Message msg)方法
+	 * 该信息将会在对应的时间，被绑定好的handler对象中接收并传入 handleMessage(Message msg) 方法
      * 
      * 返回值为Boolean值，表示是否发送成功。
      * 一般情况下，发送失败是因为当前Looper的消息队列正在退出
@@ -458,102 +411,63 @@ public final class Message implements Parcelable{
 	 * 每个Handler都有自己的命名空间，不需担心会有冲突
      */
     public int what;
-
-    /**
-     * 用于简单存储的int值
-     */
+    /** 用于简单存储的int值 */
     public int arg1;
-
-    /**
-     * 用于简单存储的int值
-     */
+    /** 用于简单存储的int值 */
     public int arg2;
-
-    /**
-     * 存储任意对象用于发送给接收者
-     */
+    /** 存储任意对象用于发送给接收者 */
     public Object obj;
-
     ...
-
-    /**
-     * 消息的处理时间
-     */
+    /** 消息的处理时间 */
     /*package*/ long when;
-
-	/**
-     * 消息附带的数据
-     */
+	/** 消息附带的数据 */
     /*package*/ Bundle data;
-
-    /**
-     * 发送目标Handler对象
-     */
+    /** 发送目标Handler对象 */
     /*package*/ Handler target;
-
-    /**
-     * 本消息的Runnable对象
-     */
+    /** 本消息的Runnable对象 */
     /*package*/ Runnable callback;
-
-    /**
-     * 当前Message对象的下一个Message对象
-     */
+    /** 当前Message对象的下一个Message对象 */
     /*package*/ Message next;
-
-    /**
-     * 用于多线程中对象锁的对象
-     */
+    /** 用于多线程中对象锁的对象 */
     private static final Object sPoolSync = new Object();
-
-    /**
-     * Message对象池
-     */
+    /** Message 全局对象池 */
     private static Message sPool;
-
-    /**
-     * Message对象池的大小
-     */
+    /** Message对象池的大小 */
     private static int sPoolSize = 0;
-
-    /**
-     * Message对象池的大小上限
-     */
+    /** Message对象池的大小上限 */
     private static final int MAX_POOL_SIZE = 50;
-
-    /**
-     * 当前Message对象是否可复用
-     */
+    /** 当前Message对象是否可复用 */
     private static boolean gCheckRecycle = true;
 }
 ```
 
-通过阅读Message的源码我们发现，Message存储了各种数据、目标Handler对象的引用和下一个Message对象的引用。从这Message的结构也能看出来，其实所谓的Message队列并不是队列结构而是链表结构。
+通过阅读 Message 的源码我们发现，Message 存储了各种数据：
+* 当 Message 到执行时间后需要被通知的目标 Handler 对象的引用
+* 下一个 Message 对象的引用。从 Message 的结构也能看出来，其实所谓的 Message 队列并不是队列结构而是链表结构。
 
-为什么使用的是链表结构而不是队列结构，因为链表有助于元素的插入和删除。
+为什么使用的是链表结构而不是队列结构，因为链表有助于元素的插入和删除。执行时间的顺序由 MessageQueue 的 next 方法执行
 
 #### 2.3.2、Message的对象获取
 
-虽然Message的构造函数是对外开放的，但是官方建议我们多使用obtain()方法来获取Message的对象
+虽然 Message 的构造函数是对外开放的，但是官方建议我们多使用 obtain() 方法来获取 Message 的对象
 
 **官方原文：**
 
-*Constructor (but the preferred way to get a Message is to call  Message.obtain()).*
+>Constructor (but the preferred way to get a Message is to call  Message.obtain()).
 
 ```java
 
-	/** 
-	 * 不建议使用
-     */
+	/**  不建议使用 */
     public Message() {
     }
 
 	/**
-     * 从本地Message池中获取Message对象
+     * 尝试从本地Message池中获取Message对象
      * 如果本地池中没有Message对象则新建一个
      */
     public static Message obtain() {
         synchronized (sPoolSync) {
+            // 尝试从本地Message池中获取Message对象
             if (sPool != null) {
                 Message m = sPool;
                 sPool = m.next;
@@ -563,6 +477,7 @@ public final class Message implements Parcelable{
                 return m;
             }
         }
+        // 如果本地池中没有Message对象则新建一个
         return new Message();
     }
 
@@ -673,36 +588,27 @@ public final class Message implements Parcelable{
 ```
 
 ### 2.4、MessageQueue 源码分析
-MessageQueue的主要作用是管理Message消息的出队读取数据与入队
+MessageQueue 的主要作用是管理 Message 消息的出队读取数据与入队
 
 #### 2.4.1、next()
-从Message队列中读取消息内容并让Message出队
+从 MessageQueue 中读取消息内容并让Message出队
 
 ```java
 Message next() {
-        
         ...
-
-        //死循环以从队列找出有效的Message对象
+        //死循环以从队列找出有效的 Message 对象
+        // 如果一直没有 Message，Looper 所在的线程就会一直卡在当前死循环直到有消息到来。
         for (;;) {
-            
             ...
-
-            //使用本地方法从队列中取出一个Message节点
-            nativePollOnce(ptr, nextPollTimeoutMillis);
-
             synchronized (this) {
                 // Try to retrieve the next message.  Return if found.
                 final long now = SystemClock.uptimeMillis();
                 Message prevMsg = null;
                 Message msg = mMessages;
-                
                 ...
-
                 if (msg != null) {
                     if (now < msg.when) {
-                        // Next message is not ready.  Set a timeout to wake up when it is ready.
-                        nextPollTimeoutMillis = (int) Math.min(msg.when - now, Integer.MAX_VALUE);
+                        // 当前遍历到的消息未到执行时间，跳过
                     } else {
                     	//当消息到了该执行的时间则将消息从消息队列拉出并返回
                         // Got a message.
@@ -713,7 +619,7 @@ Message next() {
                             mMessages = msg.next;
                         }
                         msg.next = null;
-                        if (DEBUG) Log.v(TAG, "Returning message: " + msg);
+                        ...
                         msg.markInUse();
                         return msg;
                     }
@@ -721,12 +627,9 @@ Message next() {
                     // No more messages.
                     nextPollTimeoutMillis = -1;
                 }
-
                 ...
             }
-
             ...
-
         }
     }
 ```
@@ -736,13 +639,9 @@ Message消息的入队
 
 ```java
 boolean enqueueMessage(Message msg, long when) {
-        
         ...
-
-        synchronized (this) {
-            
+        synchronized (this) { 
             ...
-
             msg.markInUse();
             msg.when = when;
             Message p = mMessages;
@@ -753,7 +652,7 @@ boolean enqueueMessage(Message msg, long when) {
                 mMessages = msg;
                 needWake = mBlocked;
             } else {
-            	//将Message消息插入消息队列的中间
+            	//将 Message 消息插入消息队列的中间
             	needWake = mBlocked && p.target == null && msg.isAsynchronous();
                 Message prev;
                 for (;;) {
@@ -769,7 +668,6 @@ boolean enqueueMessage(Message msg, long when) {
                 msg.next = p; // invariant: p == prev.next
                 prev.next = msg;
             }
-
             // We can assume mPtr != 0 because mQuitting is false.
             if (needWake) {
                 nativeWake(mPtr);
